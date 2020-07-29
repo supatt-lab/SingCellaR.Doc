@@ -1,0 +1,40 @@
+name: "SingCellaR"
+navbar:
+  title: "SingCellaR"
+  href: Introduction.html
+  left:
+    - text: "Introduction"
+      href: Introduction.html
+    - text: "Standard analysis workflow for PBMCs"
+      href: SingCellaR_workflow1.html
+    - text: "Integrative analysis from multiple samples"
+      menu:
+        - text: "Individual sample analysis"
+          menu:
+          - text: "Healthy donor sample 1"
+            href: SingCellaR_workflow_Psaila_et_al_sample1.html
+          - text: "Healthy donor sample 6"
+            href: SingCellaR_workflow_Psaila_et_al_sample6.html
+          - text: "Myelofibrosis patient 11"
+            href: SingCellaR_workflow_Psaila_et_al_sample11.html
+          - text: "Myelofibrosis patient 20"
+            href: SingCellaR_workflow_Psaila_et_al_sample20.html
+          - text: "Myelofibrosis patient 21"
+            href: SingCellaR_workflow_Psaila_et_al_sample21.html
+        - text: "Integrative analysis from multiple samples"
+          href: SingCellaR_workflow_Psaila_et_al_integration.html
+        - text: "Integrative downstream analyses"
+          href: SingCellaR_workflow_Psaila_et_al_integration_analysis.html
+    - text: "TARGET-Seq analysis"
+      href: SingCellaR_workflow_TARGET_Seq.html
+  right:
+    - icon: fa-envelope
+      href: mailto:supat.thongjuea@imm.ox.ac.uk
+title : "SingCellaR"     
+output: 
+  html_document:
+    toc: true
+    theme: cerulean
+    toc_float: true
+    toc_depth: 3
+    highlight: textmate
