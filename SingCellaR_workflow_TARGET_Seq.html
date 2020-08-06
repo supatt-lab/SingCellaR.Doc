@@ -427,8 +427,8 @@ $(document).ready(function() {
 <pre class="r"><code>library(SingCellaR)
 
 MPN&lt;-new(&quot;TargetSeq&quot;)
-MPN@GenesExpressionMatrixFile&lt;-&quot;../SingCellaR_example_data_sets/TARGET_Seq/counts_HT_TARGET_GRCh38.v2.txt&quot;
-MPN@CellsMetaDataFile&lt;-&quot;../SingCellaR_example_data_sets/TARGET_Seq/HT_TARGETseq_colData.qc_Ghr38.txt&quot;
+MPN@GenesExpressionMatrixFile&lt;-&quot;../SingCellaR_example_datasets/TARGET_Seq/counts_HT_TARGET_GRCh38.v2.txt&quot;
+MPN@CellsMetaDataFile&lt;-&quot;../SingCellaR_example_datasets/TARGET_Seq/HT_TARGETseq_colData.qc_Ghr38.txt&quot;
 load_gene_expression_from_a_file(MPN,isTargetSeq = T,sep=&quot;\t&quot;)</code></pre>
 <pre><code>## [1] &quot;The sparse matrix is created.&quot;</code></pre>
 <pre class="r"><code>MPN</code></pre>
@@ -610,7 +610,7 @@ Update cell information
   |                                                                            
   |======================================================================| 100%[1] &quot;Using :4696 genes for fitting the GLM model!&quot;
 ## [1] &quot;Identified :3639 variable genes&quot;</code></pre>
-<pre class="r"><code>remove_unwanted_genes_from_variable_gene_set(MPN,gmt.file = &quot;../SingCellaR_example_data_sets/Human_gene_sets/human.ribosomal-mitocondrial.genes.gmt&quot;,
+<pre class="r"><code>remove_unwanted_genes_from_variable_gene_set(MPN,gmt.file = &quot;../SingCellaR_example_datasets/Human_genesets/human.ribosomal-mitocondrial.genes.gmt&quot;,
                                              removed_gene_sets=c(&quot;Ribosomal_gene&quot;,&quot;Mitocondrial_gene&quot;))</code></pre>
 <pre><code>## [1] &quot;6 genes are removed from the variable gene set.&quot;</code></pre>
 <p>Here, the plot shows highly variable genes in the fitted GLM model.</p>
@@ -646,20 +646,20 @@ Update cell information
 <h2>UMAP analysis</h2>
 <pre class="r"><code>runUMAP(MPN,dim_reduction_method = &quot;pca&quot;,n.dims.use = 10,n.neighbors = 20,
         uwot.metric = &quot;euclidean&quot;)</code></pre>
-<pre><code>## 00:35:04 UMAP embedding parameters a = 1.121 b = 1.057</code></pre>
-<pre><code>## 00:35:04 Read 2626 rows and found 10 numeric columns</code></pre>
-<pre><code>## 00:35:04 Using Annoy for neighbor search, n_neighbors = 20</code></pre>
-<pre><code>## 00:35:04 Building Annoy index with metric = euclidean, n_trees = 50</code></pre>
+<pre><code>## 22:34:18 UMAP embedding parameters a = 1.121 b = 1.057</code></pre>
+<pre><code>## 22:34:18 Read 2626 rows and found 10 numeric columns</code></pre>
+<pre><code>## 22:34:18 Using Annoy for neighbor search, n_neighbors = 20</code></pre>
+<pre><code>## 22:34:18 Building Annoy index with metric = euclidean, n_trees = 50</code></pre>
 <pre><code>## 0%   10   20   30   40   50   60   70   80   90   100%</code></pre>
 <pre><code>## [----|----|----|----|----|----|----|----|----|----|</code></pre>
 <pre><code>## **************************************************|
-## 00:35:05 Writing NN index file to temp file /var/folders/c6/_w309xr54n7cphf9nw4x_ms40000gn/T//RtmpjXyMev/file218818a57779
-## 00:35:05 Searching Annoy index using 8 threads, search_k = 2000
-## 00:35:05 Annoy recall = 100%
-## 00:35:06 Commencing smooth kNN distance calibration using 8 threads
-## 00:35:06 Initializing from normalized Laplacian + noise
-## 00:35:06 Commencing optimization for 500 epochs, with 67982 positive edges
-## 00:35:09 Optimization finished</code></pre>
+## 22:34:19 Writing NN index file to temp file /var/folders/c6/_w309xr54n7cphf9nw4x_ms40000gn/T//Rtmp4Jl4nD/file26b5245b0d08
+## 22:34:19 Searching Annoy index using 8 threads, search_k = 2000
+## 22:34:19 Annoy recall = 100%
+## 22:34:19 Commencing smooth kNN distance calibration using 8 threads
+## 22:34:20 Initializing from normalized Laplacian + noise
+## 22:34:20 Commencing optimization for 500 epochs, with 67982 positive edges
+## 22:34:23 Optimization finished</code></pre>
 <pre><code>## [1] &quot;UMAP analysis is done!.&quot;</code></pre>
 <pre class="r"><code>plot_umap_label_by_a_feature_of_interest(MPN,feature = &quot;donor&quot;,point.size = 1)</code></pre>
 <p><img src="SingCellaR_workflow_TARGET_Seq_files/figure-html/unnamed-chunk-18-1.png" width="672" /></p>
@@ -760,20 +760,20 @@ Update cell information
 <h2>UMAP analysis after regressing out batches and donors</h2>
 <pre class="r"><code>runUMAP(MPN,dim_reduction_method = &quot;pca&quot;,n.dims.use = 10,n.neighbors = 20,
         uwot.metric = &quot;euclidean&quot;)</code></pre>
-<pre><code>## 00:35:45 UMAP embedding parameters a = 1.121 b = 1.057</code></pre>
-<pre><code>## 00:35:45 Read 2626 rows and found 10 numeric columns</code></pre>
-<pre><code>## 00:35:45 Using Annoy for neighbor search, n_neighbors = 20</code></pre>
-<pre><code>## 00:35:45 Building Annoy index with metric = euclidean, n_trees = 50</code></pre>
+<pre><code>## 22:34:57 UMAP embedding parameters a = 1.121 b = 1.057</code></pre>
+<pre><code>## 22:34:57 Read 2626 rows and found 10 numeric columns</code></pre>
+<pre><code>## 22:34:57 Using Annoy for neighbor search, n_neighbors = 20</code></pre>
+<pre><code>## 22:34:57 Building Annoy index with metric = euclidean, n_trees = 50</code></pre>
 <pre><code>## 0%   10   20   30   40   50   60   70   80   90   100%</code></pre>
 <pre><code>## [----|----|----|----|----|----|----|----|----|----|</code></pre>
 <pre><code>## **************************************************|
-## 00:35:46 Writing NN index file to temp file /var/folders/c6/_w309xr54n7cphf9nw4x_ms40000gn/T//RtmpjXyMev/file218872d67b2a
-## 00:35:46 Searching Annoy index using 8 threads, search_k = 2000
-## 00:35:46 Annoy recall = 100%
-## 00:35:46 Commencing smooth kNN distance calibration using 8 threads
-## 00:35:47 Initializing from normalized Laplacian + noise
-## 00:35:47 Commencing optimization for 500 epochs, with 70486 positive edges
-## 00:35:50 Optimization finished</code></pre>
+## 22:34:58 Writing NN index file to temp file /var/folders/c6/_w309xr54n7cphf9nw4x_ms40000gn/T//Rtmp4Jl4nD/file26b562832020
+## 22:34:58 Searching Annoy index using 8 threads, search_k = 2000
+## 22:34:58 Annoy recall = 100%
+## 22:34:58 Commencing smooth kNN distance calibration using 8 threads
+## 22:34:59 Initializing from normalized Laplacian + noise
+## 22:34:59 Commencing optimization for 500 epochs, with 70486 positive edges
+## 22:35:02 Optimization finished</code></pre>
 <pre><code>## [1] &quot;UMAP analysis is done!.&quot;</code></pre>
 <pre class="r"><code>plot_umap_label_by_a_feature_of_interest(MPN,feature = &quot;donor&quot;,point.size = 1)</code></pre>
 <p><img src="SingCellaR_workflow_TARGET_Seq_files/figure-html/unnamed-chunk-26-1.png" width="672" /></p>
@@ -874,14 +874,14 @@ sig.genes&lt;-sig.genes[order(abs(sig.genes$log2FC),decreasing = T),]</code></pr
 <pre class="r"><code>GSEA.results&lt;-Run_fGSEA_analysis(objectA = MPN, objectB = MPN, 
                                  cellsA = WT_normal.cell_ids, cellsB = WT_patient.cell_ids,
                                  GSEAPrerankedGenes_info = preranked.genes,
-                                 gmt.file = &quot;../SingCellaR_example_data_sets/Human_gene_sets/h.all.v7.1.symbols.gmt&quot;,
+                                 gmt.file = &quot;../SingCellaR_example_datasets/Human_genesets/h.all.v7.1.symbols.gmt&quot;,
                                  plotGSEA = T)</code></pre>
 <p><img src="SingCellaR_workflow_TARGET_Seq_files/figure-html/unnamed-chunk-40-1.png" width="672" /></p>
 <pre><code>## [1] &quot;Processing GSEA!&quot;</code></pre>
 </div>
 <div id="save-singcellar-object-for-the-further-downstream-analysis" class="section level2">
 <h2>Save SingCellaR object for the further downstream analysis</h2>
-<pre class="r"><code>save(MPN,file=&quot;../SingCellaR_example_data_sets/Psaila_et_al/SingCellaR_objects/MPN_v0.1.SingCellaR.rdata&quot;)</code></pre>
+<pre class="r"><code>save(MPN,file=&quot;../SingCellaR_example_datasets/Psaila_et_al/SingCellaR_objects/MPN_v0.1.SingCellaR.rdata&quot;)</code></pre>
 </div>
 
 
