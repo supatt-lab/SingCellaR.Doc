@@ -604,20 +604,20 @@ UMAP analysis
 </h4>
 <pre class="r"><code>SingCellaR::runUMAP(human_HSPCs,dim_reduction_method = &quot;pca&quot;,n.dims.use = 30,n.neighbors = 30,
         uwot.metric = &quot;euclidean&quot;)</code></pre>
-<pre><code>## 17:11:31 UMAP embedding parameters a = 1.121 b = 1.057</code></pre>
-<pre><code>## 17:11:31 Read 5000 rows and found 30 numeric columns</code></pre>
-<pre><code>## 17:11:31 Using Annoy for neighbor search, n_neighbors = 30</code></pre>
-<pre><code>## 17:11:31 Building Annoy index with metric = euclidean, n_trees = 50</code></pre>
+<pre><code>## 15:28:37 UMAP embedding parameters a = 1.121 b = 1.057</code></pre>
+<pre><code>## 15:28:37 Read 5000 rows and found 30 numeric columns</code></pre>
+<pre><code>## 15:28:37 Using Annoy for neighbor search, n_neighbors = 30</code></pre>
+<pre><code>## 15:28:37 Building Annoy index with metric = euclidean, n_trees = 50</code></pre>
 <pre><code>## 0%   10   20   30   40   50   60   70   80   90   100%</code></pre>
 <pre><code>## [----|----|----|----|----|----|----|----|----|----|</code></pre>
 <pre><code>## **************************************************|
-## 17:11:31 Writing NN index file to temp file /var/folders/c6/_w309xr54n7cphf9nw4x_ms40000gn/T//RtmpytRg4n/file167d1447eba4
-## 17:11:31 Searching Annoy index using 8 threads, search_k = 3000
-## 17:11:31 Annoy recall = 100%
-## 17:11:32 Commencing smooth kNN distance calibration using 8 threads
-## 17:11:32 Initializing from normalized Laplacian + noise
-## 17:11:32 Commencing optimization for 500 epochs, with 210330 positive edges
-## 17:11:38 Optimization finished</code></pre>
+## 15:28:38 Writing NN index file to temp file /var/folders/c6/_w309xr54n7cphf9nw4x_ms40000gn/T//RtmphmZeW0/file68d197c4fff
+## 15:28:38 Searching Annoy index using 8 threads, search_k = 3000
+## 15:28:38 Annoy recall = 100%
+## 15:28:38 Commencing smooth kNN distance calibration using 8 threads
+## 15:28:39 Initializing from normalized Laplacian + noise
+## 15:28:39 Commencing optimization for 500 epochs, with 210330 positive edges
+## 15:28:45 Optimization finished</code></pre>
 <pre><code>## [1] &quot;UMAP analysis is done!.&quot;</code></pre>
 <h4>
 Plot UMAP with sampleIDs
@@ -722,20 +722,20 @@ UMAP analysis
 </h4>
 <pre class="r"><code>SingCellaR::runUMAP(human_HSPCs,useIntegrativeEmbeddings = T, integrative_method = &quot;supervised_harmony&quot;,n.dims.use = 20,
         n.neighbors = 30,uwot.metric = &quot;euclidean&quot;)</code></pre>
-<pre><code>## 17:12:00 UMAP embedding parameters a = 1.121 b = 1.057</code></pre>
-<pre><code>## 17:12:00 Read 5000 rows and found 20 numeric columns</code></pre>
-<pre><code>## 17:12:00 Using Annoy for neighbor search, n_neighbors = 30</code></pre>
-<pre><code>## 17:12:00 Building Annoy index with metric = euclidean, n_trees = 50</code></pre>
+<pre><code>## 15:29:06 UMAP embedding parameters a = 1.121 b = 1.057</code></pre>
+<pre><code>## 15:29:06 Read 5000 rows and found 20 numeric columns</code></pre>
+<pre><code>## 15:29:06 Using Annoy for neighbor search, n_neighbors = 30</code></pre>
+<pre><code>## 15:29:06 Building Annoy index with metric = euclidean, n_trees = 50</code></pre>
 <pre><code>## 0%   10   20   30   40   50   60   70   80   90   100%</code></pre>
 <pre><code>## [----|----|----|----|----|----|----|----|----|----|</code></pre>
 <pre><code>## **************************************************|
-## 17:12:00 Writing NN index file to temp file /var/folders/c6/_w309xr54n7cphf9nw4x_ms40000gn/T//RtmpytRg4n/file167d6b29fb12
-## 17:12:00 Searching Annoy index using 8 threads, search_k = 3000
-## 17:12:00 Annoy recall = 100%
-## 17:12:01 Commencing smooth kNN distance calibration using 8 threads
-## 17:12:02 Initializing from normalized Laplacian + noise
-## 17:12:02 Commencing optimization for 500 epochs, with 220342 positive edges
-## 17:12:07 Optimization finished</code></pre>
+## 15:29:07 Writing NN index file to temp file /var/folders/c6/_w309xr54n7cphf9nw4x_ms40000gn/T//RtmphmZeW0/file68d67b2d91d
+## 15:29:07 Searching Annoy index using 8 threads, search_k = 3000
+## 15:29:07 Annoy recall = 100%
+## 15:29:07 Commencing smooth kNN distance calibration using 8 threads
+## 15:29:08 Initializing from normalized Laplacian + noise
+## 15:29:08 Commencing optimization for 500 epochs, with 220564 positive edges
+## 15:29:14 Optimization finished</code></pre>
 <pre><code>## [1] &quot;UMAP analysis is done!.&quot;</code></pre>
 <h4>
 Plot UMAP with sampleIDs
@@ -748,7 +748,7 @@ Plot UMAP with sample status
 <pre class="r"><code>plot_umap_label_by_a_feature_of_interest(human_HSPCs,feature = &quot;status&quot;,point.size = 0.5)</code></pre>
 <p><img src="SingCellaR_workflow_Psaila_et_al_integration_files/figure-html/plot_UMAP_status_supervised_harmony-1.png" width="672" /></p>
 <h4>
-The superimpose of signature gene scores
+The superimposition of signature gene scores
 </h4>
 <p>The plot below shows the superimposition of gene scores from erythroid, myeloid, lymphoid, and megakaryocyte gene sets on top UMAP and force-directed graph respectively.</p>
 <pre class="r"><code>plot_umap_label_by_multiple_gene_sets(human_HSPCs,gmt.file = &quot;../SingCellaR_example_datasets/Human_genesets/human.signature.genes.v1.gmt&quot;,
@@ -788,20 +788,20 @@ UMAP analysis
 </h4>
 <pre class="r"><code>SingCellaR::runUMAP(human_HSPCs,useIntegrativeEmbeddings = T, integrative_method = &quot;harmony&quot;,n.dims.use = 20,
         n.neighbors = 30,uwot.metric = &quot;euclidean&quot;)</code></pre>
-<pre><code>## 17:12:39 UMAP embedding parameters a = 1.121 b = 1.057</code></pre>
-<pre><code>## 17:12:39 Read 5000 rows and found 20 numeric columns</code></pre>
-<pre><code>## 17:12:39 Using Annoy for neighbor search, n_neighbors = 30</code></pre>
-<pre><code>## 17:12:39 Building Annoy index with metric = euclidean, n_trees = 50</code></pre>
+<pre><code>## 15:29:46 UMAP embedding parameters a = 1.121 b = 1.057</code></pre>
+<pre><code>## 15:29:46 Read 5000 rows and found 20 numeric columns</code></pre>
+<pre><code>## 15:29:46 Using Annoy for neighbor search, n_neighbors = 30</code></pre>
+<pre><code>## 15:29:46 Building Annoy index with metric = euclidean, n_trees = 50</code></pre>
 <pre><code>## 0%   10   20   30   40   50   60   70   80   90   100%</code></pre>
 <pre><code>## [----|----|----|----|----|----|----|----|----|----|</code></pre>
 <pre><code>## **************************************************|
-## 17:12:40 Writing NN index file to temp file /var/folders/c6/_w309xr54n7cphf9nw4x_ms40000gn/T//RtmpytRg4n/file167d67f6d1aa
-## 17:12:40 Searching Annoy index using 8 threads, search_k = 3000
-## 17:12:40 Annoy recall = 100%
-## 17:12:40 Commencing smooth kNN distance calibration using 8 threads
-## 17:12:41 Initializing from normalized Laplacian + noise
-## 17:12:41 Commencing optimization for 500 epochs, with 218016 positive edges
-## 17:12:47 Optimization finished</code></pre>
+## 15:29:46 Writing NN index file to temp file /var/folders/c6/_w309xr54n7cphf9nw4x_ms40000gn/T//RtmphmZeW0/file68d14a35349
+## 15:29:46 Searching Annoy index using 8 threads, search_k = 3000
+## 15:29:47 Annoy recall = 100%
+## 15:29:47 Commencing smooth kNN distance calibration using 8 threads
+## 15:29:48 Initializing from normalized Laplacian + noise
+## 15:29:48 Commencing optimization for 500 epochs, with 218016 positive edges
+## 15:29:53 Optimization finished</code></pre>
 <pre><code>## [1] &quot;UMAP analysis is done!.&quot;</code></pre>
 <h4>
 Plot UMAP with sampleIDs
@@ -873,20 +873,20 @@ UMAP analysis
 </h4>
 <pre class="r"><code>SingCellaR::runUMAP(human_HSPCs,useIntegrativeEmbeddings = T, integrative_method = &quot;seurat&quot;,n.dims.use = 20,
         n.neighbors = 30,uwot.metric = &quot;euclidean&quot;)</code></pre>
-<pre><code>## 17:14:15 UMAP embedding parameters a = 1.121 b = 1.057</code></pre>
-<pre><code>## 17:14:15 Read 5000 rows and found 20 numeric columns</code></pre>
-<pre><code>## 17:14:15 Using Annoy for neighbor search, n_neighbors = 30</code></pre>
-<pre><code>## 17:14:15 Building Annoy index with metric = euclidean, n_trees = 50</code></pre>
+<pre><code>## 15:31:22 UMAP embedding parameters a = 1.121 b = 1.057</code></pre>
+<pre><code>## 15:31:22 Read 5000 rows and found 20 numeric columns</code></pre>
+<pre><code>## 15:31:22 Using Annoy for neighbor search, n_neighbors = 30</code></pre>
+<pre><code>## 15:31:22 Building Annoy index with metric = euclidean, n_trees = 50</code></pre>
 <pre><code>## 0%   10   20   30   40   50   60   70   80   90   100%</code></pre>
 <pre><code>## [----|----|----|----|----|----|----|----|----|----|</code></pre>
 <pre><code>## **************************************************|
-## 17:14:16 Writing NN index file to temp file /var/folders/c6/_w309xr54n7cphf9nw4x_ms40000gn/T//RtmpytRg4n/file167d6d146f51
-## 17:14:16 Searching Annoy index using 8 threads, search_k = 3000
-## 17:14:16 Annoy recall = 100%
-## 17:14:17 Commencing smooth kNN distance calibration using 8 threads
-## 17:14:17 Initializing from normalized Laplacian + noise
-## 17:14:17 Commencing optimization for 500 epochs, with 226792 positive edges
-## 17:14:23 Optimization finished</code></pre>
+## 15:31:23 Writing NN index file to temp file /var/folders/c6/_w309xr54n7cphf9nw4x_ms40000gn/T//RtmphmZeW0/file68d55924bf
+## 15:31:23 Searching Annoy index using 8 threads, search_k = 3000
+## 15:31:23 Annoy recall = 100%
+## 15:31:23 Commencing smooth kNN distance calibration using 8 threads
+## 15:31:24 Initializing from normalized Laplacian + noise
+## 15:31:24 Commencing optimization for 500 epochs, with 226792 positive edges
+## 15:31:30 Optimization finished</code></pre>
 <pre><code>## [1] &quot;UMAP analysis is done!.&quot;</code></pre>
 <h4>
 Plot UMAP with sampleIDs
@@ -1002,7 +1002,7 @@ Force-directed graph analysis
   |====================================================================  |  97%
   |                                                                            
   |======================================================================| 100%
-## Finished in 3.505278 mins, 30 iterations.
+## Finished in 3.629243 mins, 30 iterations.
 ## Max iterations set: 30.
 ## Final objective delta: 0.0001592596.
 ## Best results with seed 1.
@@ -1012,20 +1012,20 @@ UMAP analysis
 </h4>
 <pre class="r"><code>SingCellaR::runUMAP(human_HSPCs,useIntegrativeEmbeddings = T, integrative_method = &quot;liger&quot;,n.dims.use = 20,
         n.neighbors = 30,uwot.metric = &quot;euclidean&quot;)</code></pre>
-<pre><code>## 17:18:25 UMAP embedding parameters a = 1.121 b = 1.057</code></pre>
-<pre><code>## 17:18:25 Read 5000 rows and found 20 numeric columns</code></pre>
-<pre><code>## 17:18:25 Using Annoy for neighbor search, n_neighbors = 30</code></pre>
-<pre><code>## 17:18:25 Building Annoy index with metric = euclidean, n_trees = 50</code></pre>
+<pre><code>## 15:35:39 UMAP embedding parameters a = 1.121 b = 1.057</code></pre>
+<pre><code>## 15:35:39 Read 5000 rows and found 20 numeric columns</code></pre>
+<pre><code>## 15:35:39 Using Annoy for neighbor search, n_neighbors = 30</code></pre>
+<pre><code>## 15:35:39 Building Annoy index with metric = euclidean, n_trees = 50</code></pre>
 <pre><code>## 0%   10   20   30   40   50   60   70   80   90   100%</code></pre>
 <pre><code>## [----|----|----|----|----|----|----|----|----|----|</code></pre>
 <pre><code>## **************************************************|
-## 17:18:26 Writing NN index file to temp file /var/folders/c6/_w309xr54n7cphf9nw4x_ms40000gn/T//RtmpytRg4n/file167d76c4f90f
-## 17:18:26 Searching Annoy index using 8 threads, search_k = 3000
-## 17:18:26 Annoy recall = 100%
-## 17:18:26 Commencing smooth kNN distance calibration using 8 threads
-## 17:18:27 Initializing from normalized Laplacian + noise
-## 17:18:27 Commencing optimization for 500 epochs, with 194298 positive edges
-## 17:18:33 Optimization finished</code></pre>
+## 15:35:39 Writing NN index file to temp file /var/folders/c6/_w309xr54n7cphf9nw4x_ms40000gn/T//RtmphmZeW0/file68d5302bce2
+## 15:35:39 Searching Annoy index using 8 threads, search_k = 3000
+## 15:35:39 Annoy recall = 100%
+## 15:35:40 Commencing smooth kNN distance calibration using 8 threads
+## 15:35:40 Initializing from normalized Laplacian + noise
+## 15:35:40 Commencing optimization for 500 epochs, with 194298 positive edges
+## 15:35:46 Optimization finished</code></pre>
 <pre><code>## [1] &quot;UMAP analysis is done!.&quot;</code></pre>
 <h4>
 Plot UMAP with sampleIDs
@@ -1038,7 +1038,7 @@ Plot UMAP with the sample status
 <pre class="r"><code>plot_umap_label_by_a_feature_of_interest(human_HSPCs,feature = &quot;status&quot;,point.size = 0.5)</code></pre>
 <p><img src="SingCellaR_workflow_Psaila_et_al_integration_files/figure-html/plot_UMAP_status_liger-1.png" width="672" /></p>
 <h4>
-The superimpose of signature gene scores
+The superimposition of signature gene scores
 </h4>
 <p>The plot below shows the superimposition of gene scores from erythroid, myeloid, lymphoid, and megakaryocyte gene sets on top UMAP and force-directed graph respectively.</p>
 <pre class="r"><code>plot_umap_label_by_multiple_gene_sets(human_HSPCs,gmt.file = &quot;../SingCellaR_example_datasets/Human_genesets/human.signature.genes.v1.gmt&quot;,
@@ -1085,20 +1085,20 @@ UMAP analysis
 </h4>
 <pre class="r"><code>SingCellaR::runUMAP(human_HSPCs,dim_reduction_method = &quot;pca&quot;,
         n.dims.use = 20,n.neighbors = 30,uwot.metric = &quot;euclidean&quot;)</code></pre>
-<pre><code>## 17:19:09 UMAP embedding parameters a = 1.121 b = 1.057</code></pre>
-<pre><code>## 17:19:09 Read 5000 rows and found 20 numeric columns</code></pre>
-<pre><code>## 17:19:09 Using Annoy for neighbor search, n_neighbors = 30</code></pre>
-<pre><code>## 17:19:09 Building Annoy index with metric = euclidean, n_trees = 50</code></pre>
+<pre><code>## 15:36:22 UMAP embedding parameters a = 1.121 b = 1.057</code></pre>
+<pre><code>## 15:36:22 Read 5000 rows and found 20 numeric columns</code></pre>
+<pre><code>## 15:36:22 Using Annoy for neighbor search, n_neighbors = 30</code></pre>
+<pre><code>## 15:36:22 Building Annoy index with metric = euclidean, n_trees = 50</code></pre>
 <pre><code>## 0%   10   20   30   40   50   60   70   80   90   100%</code></pre>
 <pre><code>## [----|----|----|----|----|----|----|----|----|----|</code></pre>
 <pre><code>## **************************************************|
-## 17:19:09 Writing NN index file to temp file /var/folders/c6/_w309xr54n7cphf9nw4x_ms40000gn/T//RtmpytRg4n/file167d42c2756c
-## 17:19:09 Searching Annoy index using 8 threads, search_k = 3000
-## 17:19:09 Annoy recall = 100%
-## 17:19:10 Commencing smooth kNN distance calibration using 8 threads
-## 17:19:10 Initializing from normalized Laplacian + noise
-## 17:19:10 Commencing optimization for 500 epochs, with 224654 positive edges
-## 17:19:16 Optimization finished</code></pre>
+## 15:36:22 Writing NN index file to temp file /var/folders/c6/_w309xr54n7cphf9nw4x_ms40000gn/T//RtmphmZeW0/file68d5f2541e0
+## 15:36:22 Searching Annoy index using 8 threads, search_k = 3000
+## 15:36:23 Annoy recall = 100%
+## 15:36:23 Commencing smooth kNN distance calibration using 8 threads
+## 15:36:24 Initializing from normalized Laplacian + noise
+## 15:36:24 Commencing optimization for 500 epochs, with 224654 positive edges
+## 15:36:29 Optimization finished</code></pre>
 <pre><code>## [1] &quot;UMAP analysis is done!.&quot;</code></pre>
 <h4>
 Plot UMAP with sampleIDs
@@ -1163,20 +1163,20 @@ PCA analysis
 UMAP analysis
 </h4>
 <pre class="r"><code>SingCellaR::runUMAP(human_HSPCs,dim_reduction_method = &quot;pca&quot;,n.dims.use = 20, n.neighbors = 20,uwot.metric = &quot;euclidean&quot;)</code></pre>
-<pre><code>## 17:19:50 UMAP embedding parameters a = 1.121 b = 1.057</code></pre>
-<pre><code>## 17:19:50 Read 5000 rows and found 20 numeric columns</code></pre>
-<pre><code>## 17:19:50 Using Annoy for neighbor search, n_neighbors = 20</code></pre>
-<pre><code>## 17:19:50 Building Annoy index with metric = euclidean, n_trees = 50</code></pre>
+<pre><code>## 15:37:03 UMAP embedding parameters a = 1.121 b = 1.057</code></pre>
+<pre><code>## 15:37:03 Read 5000 rows and found 20 numeric columns</code></pre>
+<pre><code>## 15:37:03 Using Annoy for neighbor search, n_neighbors = 20</code></pre>
+<pre><code>## 15:37:03 Building Annoy index with metric = euclidean, n_trees = 50</code></pre>
 <pre><code>## 0%   10   20   30   40   50   60   70   80   90   100%</code></pre>
 <pre><code>## [----|----|----|----|----|----|----|----|----|----|</code></pre>
 <pre><code>## **************************************************|
-## 17:19:50 Writing NN index file to temp file /var/folders/c6/_w309xr54n7cphf9nw4x_ms40000gn/T//RtmpytRg4n/file167d49e9560b
-## 17:19:50 Searching Annoy index using 8 threads, search_k = 2000
-## 17:19:50 Annoy recall = 100%
-## 17:19:51 Commencing smooth kNN distance calibration using 8 threads
-## 17:19:51 Initializing from normalized Laplacian + noise
-## 17:19:51 Commencing optimization for 500 epochs, with 142070 positive edges
-## 17:19:56 Optimization finished</code></pre>
+## 15:37:04 Writing NN index file to temp file /var/folders/c6/_w309xr54n7cphf9nw4x_ms40000gn/T//RtmphmZeW0/file68d5faade8d
+## 15:37:04 Searching Annoy index using 8 threads, search_k = 2000
+## 15:37:04 Annoy recall = 100%
+## 15:37:04 Commencing smooth kNN distance calibration using 8 threads
+## 15:37:05 Initializing from normalized Laplacian + noise
+## 15:37:05 Commencing optimization for 500 epochs, with 142070 positive edges
+## 15:37:10 Optimization finished</code></pre>
 <pre><code>## [1] &quot;UMAP analysis is done!.&quot;</code></pre>
 <h4>
 Plot UMAP with sampleIDs
@@ -1270,20 +1270,20 @@ PCA analysis
 UMAP analysis
 </h4>
 <pre class="r"><code>SingCellaR::runUMAP(human_HSPCs,dim_reduction_method = &quot;pca&quot;,n.dims.use = 20, n.neighbors = 20,uwot.metric = &quot;euclidean&quot;)</code></pre>
-<pre><code>## 17:21:02 UMAP embedding parameters a = 1.121 b = 1.057</code></pre>
-<pre><code>## 17:21:02 Read 5000 rows and found 20 numeric columns</code></pre>
-<pre><code>## 17:21:02 Using Annoy for neighbor search, n_neighbors = 20</code></pre>
-<pre><code>## 17:21:02 Building Annoy index with metric = euclidean, n_trees = 50</code></pre>
+<pre><code>## 15:38:14 UMAP embedding parameters a = 1.121 b = 1.057</code></pre>
+<pre><code>## 15:38:14 Read 5000 rows and found 20 numeric columns</code></pre>
+<pre><code>## 15:38:14 Using Annoy for neighbor search, n_neighbors = 20</code></pre>
+<pre><code>## 15:38:14 Building Annoy index with metric = euclidean, n_trees = 50</code></pre>
 <pre><code>## 0%   10   20   30   40   50   60   70   80   90   100%</code></pre>
 <pre><code>## [----|----|----|----|----|----|----|----|----|----|</code></pre>
 <pre><code>## **************************************************|
-## 17:21:02 Writing NN index file to temp file /var/folders/c6/_w309xr54n7cphf9nw4x_ms40000gn/T//RtmpytRg4n/file167d61a8b0bf
-## 17:21:02 Searching Annoy index using 8 threads, search_k = 2000
-## 17:21:03 Annoy recall = 100%
-## 17:21:03 Commencing smooth kNN distance calibration using 8 threads
-## 17:21:03 Initializing from normalized Laplacian + noise
-## 17:21:04 Commencing optimization for 500 epochs, with 142354 positive edges
-## 17:21:09 Optimization finished</code></pre>
+## 15:38:14 Writing NN index file to temp file /var/folders/c6/_w309xr54n7cphf9nw4x_ms40000gn/T//RtmphmZeW0/file68d689e9574
+## 15:38:14 Searching Annoy index using 8 threads, search_k = 2000
+## 15:38:14 Annoy recall = 100%
+## 15:38:15 Commencing smooth kNN distance calibration using 8 threads
+## 15:38:15 Initializing from normalized Laplacian + noise
+## 15:38:15 Commencing optimization for 500 epochs, with 142354 positive edges
+## 15:38:20 Optimization finished</code></pre>
 <pre><code>## [1] &quot;UMAP analysis is done!.&quot;</code></pre>
 <h4>
 Plot UMAP with sampleIDs
