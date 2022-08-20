@@ -1,0 +1,634 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+
+
+<title>SingCellaR (version 1.2.1)</title>
+
+<script src="site_libs/header-attrs-2.15/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/cerulean.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark the anchor link active (and if it's in a dropdown, also mark that active)
+  var dropdown = menuAnchor.closest('li.dropdown');
+  if (window.bootstrap) { // Bootstrap 4+
+    menuAnchor.addClass('active');
+    dropdown.find('> .dropdown-toggle').addClass('active');
+  } else { // Bootstrap 3
+    menuAnchor.parent().addClass('active');
+    dropdown.addClass('active');
+  }
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">SingCellaR</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="Introduction.html">Introduction</a>
+</li>
+<li>
+  <a href="SingCellaR_workflow1.html">Standard analysis workflow for PBMCs</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    Integrative analysis from multiple samples
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li class="dropdown-submenu">
+      <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">Individual sample analysis</a>
+      <ul class="dropdown-menu" role="menu">
+        <li>
+          <a href="SingCellaR_workflow_Psaila_et_al_sample1.html">Healthy donor sample 1</a>
+        </li>
+        <li>
+          <a href="SingCellaR_workflow_Psaila_et_al_sample6.html">Healthy donor sample 6</a>
+        </li>
+        <li>
+          <a href="SingCellaR_workflow_Psaila_et_al_sample11.html">Myelofibrosis patient 11</a>
+        </li>
+        <li>
+          <a href="SingCellaR_workflow_Psaila_et_al_sample20.html">Myelofibrosis patient 20</a>
+        </li>
+        <li>
+          <a href="SingCellaR_workflow_Psaila_et_al_sample21.html">Myelofibrosis patient 21</a>
+        </li>
+      </ul>
+    </li>
+    <li>
+      <a href="SingCellaR_workflow_Psaila_et_al_integration.html">Integrative analysis from multiple samples</a>
+    </li>
+    <li>
+      <a href="SingCellaR_workflow_Psaila_et_al_integration_analysis.html">Integrative downstream analyses</a>
+    </li>
+  </ul>
+</li>
+<li>
+  <a href="SingCellaR_workflow_TARGET_Seq.html">TARGET-Seq analysis</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="mailto:supat.thongjuea@imm.ox.ac.uk">
+    <span class="fa fa-envelope"></span>
+     
+  </a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+
+
+<h1 class="title toc-ignore">SingCellaR (version 1.2.1)</h1>
+<h4 class="date">Last updated on 19 August, 2022</h4>
+
+</div>
+
+
+<script type="text/javascript">
+$(document).ready(function() {
+  $('#header').parent().prepend('<div id=\"logo\"><img src=\"images/SingCellaR.png\" style=\"position:static; top:0; right:0; padding:20px; height:180px\"></div>');
+  $('#header').css('margin-right', '180px')
+});
+</script>
+<div id="section" class="section level2">
+<h2></h2>
+<p>SingCellaR provides a comprehensive set of R functions for analyzing
+single-cell RNA sequencing (scRNA-seq) data. The package includes
+functionalities for:</p>
+<ul>
+<li>
+supporting the analysis of scRNA-seq datasets generated from different
+types of single-cell technologies (e.g., Chromium 10x Genomics,
+Smart-Seq2/3, and other drop-let-based technologies
+</li>
+<li>
+supporting Target-Seq analysis that integrates both mutation information
+and RNA-seq from the same single cell
+</li>
+<li>
+<p>supporting multiple integrative approaches:</p>
+<pre><code>    Harmony,
+    Seurat,
+    Liger,
+    Scanorama,
+    Limma,
+    and Combat</code></pre>
+<p>SingCellaR facilitates downstream analyses for each type of data
+integration within the same object. The users can visualize the results
+such as UMAP, tSNE, and etc., from different integrative methods in a
+single platform.</p>
+</li>
+<li>
+supporting our developed integration method, namely “supervised
+harmony”. This method is used as an additional algorithm to integrate
+data that have similar cell types (e.g. CD34+Lin-) generated from
+different batches, donors, and conditions.
+</li>
+<li>
+cluster identification, it supports clustering analyses both graph-based
+community detection and K-means clustering.
+</li>
+<li>
+cell-type annotation, we developed the cell-type annotation system that
+helps to assign the cell types to identified clusters. This system
+produces the enrichment scores of possible cell types derived from
+multiple curated signature gene sets (the users can input their
+signature genes of interest), which can greatly help assign the cell
+types.
+</li>
+<li>
+cellular trajectory analysis, SingCellaR incorporates cellular
+trajectory analysis based on Force-directed graph, KNN-graph, and
+Diffusion map. It provides the gene set scoring system that can be
+superimposed on top of the embedding to facilitate cell type and state
+annotation.
+</li>
+<li>
+differential gene expression analysis, SingCellaR combines Wilcoxon test
+on the log-transformed, normalized UMIs to compare expression level and
+Fisher′s exact test that compares the expressing cell frequency for each
+gene as previously described (Giustacchini et al., Nature Medicine,
+2017). P-values generated from both tests are then combined using
+Fisher’s method and are adjusted using the Benjamini-Hochberg (BH)
+correction.
+</li>
+<li>
+gene set enrichment analysis, SingCellaR incorporates fGSEA <a
+href="https://bioconductor.org/packages/release/bioc/html/fgsea.html"
+class="uri">https://bioconductor.org/packages/release/bioc/html/fgsea.html</a><br />
+for the GSEA analysis
+</li>
+<li>
+powerful visualization comprising:
+</li>
+<pre><code>   tSNE
+   UMAP
+   Force-directed graph
+   KNN-graph visualization in both 2D and 3D
+   Diffusion map
+   Violin plot
+   Bubble plot
+   Heatmap
+   
+   Different types of plots can be visualized with different types of information:
+   - Individual gene expression
+   - Gene set score
+   - AUCell score
+   </code></pre>
+</ul>
+</div>
+<div id="citation" class="section level2">
+<h2>Citation</h2>
+<p>If you use SingCellaR for your research, please cite our papers:</p>
+<ol style="list-style-type: decimal">
+<li><p>G. Wang, W. X. Wen, A. J. Mead, Roy, A, B. Psaila, and S.
+Thongjuea (2022). Processing single-cell RNA-seq datasets using
+SingCellaR. STAR Protocols (doi.org/10.1016/j.xpro.2022.101266) <a
+href="https://www.sciencedirect.com/science/article/pii/S2666166722001460"
+class="uri">https://www.sciencedirect.com/science/article/pii/S2666166722001460</a></p></li>
+<li><p>Roy, A., G. Wang, D. Iskander, S. O’Byrne, N. Elliott, J.
+O’Sullivan, G. Buck, E. F. Heuston, W. X. Wen, A. R. Meira, P.Hua, A.
+Karadimitris, A. J. Mead, D. M. Bodine, I. Roberts, B. Psaila and S.
+Thongjuea (2021). Transitions in lineage specification and gene
+regulatory networks in hematopoietic stem/progenitor cells over human
+development. Cell Reports 36(11).<a
+href="https://www.sciencedirect.com/science/article/pii/S2211124721011451"
+class="uri">https://www.sciencedirect.com/science/article/pii/S2211124721011451</a></p></li>
+</ol>
+</div>
+<div id="getting-started" class="section level2">
+<h2>Getting started</h2>
+<p>Installation (in R &gt;=4.2)</p>
+<pre><code>install.packages(&#39;devtools&#39;)
+library(devtools)
+install_github(&#39;supatt-lab/SingCellaR&#39;)</code></pre>
+</div>
+<div id="installation-of-python-packages-in-r-environment"
+class="section level2">
+<h2>Installation of python packages in R environment</h2>
+<p>Here is an example to create an environment, install packages within
+it, then use the created environment from R:</p>
+<pre><code>library(reticulate)
+#create a new environment 
+conda_create(&quot;r-reticulate&quot;)</code></pre>
+<p>The reticulate will create the r-miniconda in your working
+environment (e.g., in /Users/supat/Library/r-miniconda/envs)</p>
+<p>To install python library in R use:</p>
+<pre><code>&gt;py_install(&quot;fa2&quot;)</code></pre>
+<p>More information can be found from <a
+href="https://rstudio.github.io/reticulate/articles/python_packages.html#conda-installation-1"
+class="uri">https://rstudio.github.io/reticulate/articles/python_packages.html#conda-installation-1</a></p>
+<p>To install Scanorama, the user has to run ‘pip’ command line in the
+created environment working directory e.g., in
+/Users/supat/Library/r-miniconda/envs</p>
+<pre><code>&gt; cd /Users/supat/Library/r-miniconda/envs/r-reticulate</code></pre>
+<p>The standard ‘pip’ software using the command line below can be used
+:</p>
+<pre><code>&gt; ./pip install scanorama</code></pre>
+<p>To install Scrublet, please see <a
+href="https://github.com/swolock/scrublet"
+class="uri">https://github.com/swolock/scrublet</a>. The ‘pip’ command
+line can be used to install Scrublet, similar to the Scanorama
+installation.</p>
+<pre><code>&gt; ./pip install scrublet</code></pre>
+<p>SingCellaR implemented c++ functions that need to be compiled. These
+functions built on RcppArmadillo, RcppAnnoy, and RcppParallel that
+require the c++ compilation.</p>
+<p>For mac users, the compiler ‘Clang’ has to be installed <a
+href="https://clang.llvm.org/get_started.html"
+class="uri">https://clang.llvm.org/get_started.html</a></p>
+<p>Install gfortran can be found here <a
+href="https://gcc.gnu.org/wiki/GFortranBinaries"
+class="uri">https://gcc.gnu.org/wiki/GFortranBinaries</a>. Install Clang
+can be found here <a href="https://clang.llvm.org/get_started.html"
+class="uri">https://clang.llvm.org/get_started.html</a></p>
+</div>
+
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
+<script>
+$(document).ready(function ()  {
+
+    // temporarily add toc-ignore selector to headers for the consistency with Pandoc
+    $('.unlisted.unnumbered').addClass('toc-ignore')
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

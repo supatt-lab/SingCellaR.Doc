@@ -1,0 +1,1324 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+
+
+<title>SingCellaR analysis workflow for integrating multiple samples</title>
+
+<script src="site_libs/header-attrs-2.15/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/cerulean.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark the anchor link active (and if it's in a dropdown, also mark that active)
+  var dropdown = menuAnchor.closest('li.dropdown');
+  if (window.bootstrap) { // Bootstrap 4+
+    menuAnchor.addClass('active');
+    dropdown.find('> .dropdown-toggle').addClass('active');
+  } else { // Bootstrap 3
+    menuAnchor.parent().addClass('active');
+    dropdown.addClass('active');
+  }
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">SingCellaR</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="Introduction.html">Introduction</a>
+</li>
+<li>
+  <a href="SingCellaR_workflow1.html">Standard analysis workflow for PBMCs</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    Integrative analysis from multiple samples
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li class="dropdown-submenu">
+      <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">Individual sample analysis</a>
+      <ul class="dropdown-menu" role="menu">
+        <li>
+          <a href="SingCellaR_workflow_Psaila_et_al_sample1.html">Healthy donor sample 1</a>
+        </li>
+        <li>
+          <a href="SingCellaR_workflow_Psaila_et_al_sample6.html">Healthy donor sample 6</a>
+        </li>
+        <li>
+          <a href="SingCellaR_workflow_Psaila_et_al_sample11.html">Myelofibrosis patient 11</a>
+        </li>
+        <li>
+          <a href="SingCellaR_workflow_Psaila_et_al_sample20.html">Myelofibrosis patient 20</a>
+        </li>
+        <li>
+          <a href="SingCellaR_workflow_Psaila_et_al_sample21.html">Myelofibrosis patient 21</a>
+        </li>
+      </ul>
+    </li>
+    <li>
+      <a href="SingCellaR_workflow_Psaila_et_al_integration.html">Integrative analysis from multiple samples</a>
+    </li>
+    <li>
+      <a href="SingCellaR_workflow_Psaila_et_al_integration_analysis.html">Integrative downstream analyses</a>
+    </li>
+  </ul>
+</li>
+<li>
+  <a href="SingCellaR_workflow_TARGET_Seq.html">TARGET-Seq analysis</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="mailto:supat.thongjuea@imm.ox.ac.uk">
+    <span class="fa fa-envelope"></span>
+     
+  </a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+
+
+<h1 class="title toc-ignore">SingCellaR analysis workflow for
+integrating multiple samples</h1>
+
+</div>
+
+
+<script type="text/javascript">
+$(document).ready(function() {
+  $('#header').parent().prepend('<div id=\"logo\"><img src=\"images/SingCellaR.png\" style=\"position:static; top:0; right:0; padding:20px; height:180px\"></div>');
+  $('#header').css('margin-right', '180px')
+});
+</script>
+<p>SingCellaR incorporates multiple integrative methods. scRNA-seq from
+5 samples generated by Psaila et al., will be used as the example for
+the integration.</p>
+<p>First, SingCellaR objects from the individual analysis will be
+combined. The workflow below shows how to combine multiple SingCellaR
+objects.</p>
+<div id="initialization-of-singcellar-object" class="section level2">
+<h2>Initialization of SingCellaR object</h2>
+<pre class="r"><code>library(SingCellaR)
+
+human_HSPCs &lt;- new(&quot;SingCellaR&quot;)
+human_HSPCs@dir_path_SingCellR_object_files&lt;-&quot;../SingCellaR_example_datasets/Psaila_et_al/SingCellaR_objects/&quot;
+human_HSPCs@SingCellR_object_files=c(&quot;Sample1.SingCellaR.rdata&quot;,
+                                     &quot;Sample6.SingCellaR.rdata&quot;,
+                                     &quot;Sample11.SingCellaR.rdata&quot;,
+                                     &quot;Sample20.SingCellaR.rdata&quot;,
+                                     &quot;Sample21.SingCellaR.rdata&quot;)
+
+preprocess_integration(human_HSPCs)</code></pre>
+<pre><code>## 
+  |                                                                            
+  |                                                                      |   0%[1] &quot;Combining variable/marker genes, clusters info, and UMIs..&quot;
+## 
+  |                                                                            
+  |==============                                                        |  20%
+  |                                                                            
+  |============================                                          |  40%
+  |                                                                            
+  |==========================================                            |  60%
+  |                                                                            
+  |========================================================              |  80%[1] &quot;List of mitochondrial genes:&quot;
+##  [1] &quot;MT-ND1&quot;  &quot;MT-ND2&quot;  &quot;MT-CO1&quot;  &quot;MT-CO2&quot;  &quot;MT-ATP8&quot; &quot;MT-ATP6&quot; &quot;MT-CO3&quot; 
+##  [8] &quot;MT-ND3&quot;  &quot;MT-ND4L&quot; &quot;MT-ND4&quot;  &quot;MT-ND5&quot;  &quot;MT-ND6&quot;  &quot;MT-CYB&quot; 
+## [1] &quot;The meta data is processed.&quot;
+## [1] &quot;The integrated sparse matrix is created.&quot;</code></pre>
+<pre class="r"><code>human_HSPCs</code></pre>
+<pre><code>## An object of class SingCellaR with a matrix of : 33538 genes across 35892 samples.</code></pre>
+</div>
+<div id="downsampling-the-number-of-cells" class="section level2">
+<h2>Downsampling the number of cells</h2>
+<p>To speed up the integration, we downsample the number of cells to
+5,000.</p>
+<pre class="r"><code>subsample_cells(human_HSPCs,n.subsample = 5000,n.seed = 42)</code></pre>
+<pre><code>## [1] &quot;Downstream analysis will be performed using the subsampling cells!.&quot;</code></pre>
+<pre class="r"><code>human_HSPCs</code></pre>
+<pre><code>## An object of class SingCellaR with a matrix of : 33538 genes across 5000 samples.</code></pre>
+<p>In the previous individual sample analysis, poor QC cells had already
+filtered out. We therefore don’t have to filter out the cells again in
+this step. However, the function ‘filter_cells_and_genes’ has to be
+performed to add relevant cell information.</p>
+<pre class="r"><code>filter_cells_and_genes(human_HSPCs,
+                       min_UMIs=1000,
+                       max_UMIs=80000,
+                       min_detected_genes=500,
+                       max_detected_genes=8000,
+                       max_percent_mito=15,
+                       genes_with_expressing_cells = 10,isRemovedDoublets = FALSE)</code></pre>
+<pre><code>## [1] &quot;The cells and genes metadata are updated by adding the filtering status.&quot;
+## [1] &quot;0/5000 cells will be filtered out from the downstream analyses!.&quot;</code></pre>
+</div>
+<div id="adding-the-sample-status" class="section level2">
+<h2>Adding the sample status</h2>
+<p>SingCellaR allows a user to add more cell information manually to the
+metadata. Below shows the example of adding sample status ‘healthy’ and
+‘MF’ (from healthy donors and myelofibrosis patients).</p>
+<pre class="r"><code>cell_anno.info&lt;-get_cells_annotation(human_HSPCs)
+head(cell_anno.info)</code></pre>
+<pre><code>##                              Cell   sampleID UMI_count detectedGenesPerCell
+## 34020   TAGTACCTCTCTCG-1_Sample21 1_Sample21     14189                 3432
+## 8826  AAGTTCGCAGGGATAC-1_Sample11 1_Sample11     30928                 5344
+## 16740   ATATGCCTCAGATC-1_Sample20 1_Sample20      8740                 2028
+## 7700   TCCTTTCCATCGAAGG-1_Sample6  1_Sample6     16194                 3717
+## 9091  ACGTAACTCCAAGCTA-1_Sample11 1_Sample11     15175                 3691
+## 33700   TACGATCTTTATCC-1_Sample21 1_Sample21     16009                 3909
+##       percent_mito data_set IsPassed
+## 34020     3.728240        5     TRUE
+## 8826      5.842602        3     TRUE
+## 16740     4.748284        4     TRUE
+## 7700      6.595035        2     TRUE
+## 9091      2.840198        3     TRUE
+## 33700     3.604223        5     TRUE</code></pre>
+<pre class="r"><code>table(cell_anno.info$sampleID)</code></pre>
+<pre><code>## 
+##  1_Sample1 1_Sample11 1_Sample20 1_Sample21  1_Sample6 
+##        469        818       1448       1479        786</code></pre>
+<pre class="r"><code>human_HSPCs@meta.data$status[human_HSPCs@meta.data$sampleID==&quot;1_Sample1&quot;]&lt;-&quot;healthy&quot;
+human_HSPCs@meta.data$status[human_HSPCs@meta.data$sampleID==&quot;1_Sample6&quot;]&lt;-&quot;healthy&quot;
+human_HSPCs@meta.data$status[human_HSPCs@meta.data$sampleID==&quot;1_Sample11&quot;]&lt;-&quot;MF&quot;
+human_HSPCs@meta.data$status[human_HSPCs@meta.data$sampleID==&quot;1_Sample20&quot;]&lt;-&quot;MF&quot;
+human_HSPCs@meta.data$status[human_HSPCs@meta.data$sampleID==&quot;1_Sample21&quot;]&lt;-&quot;MF&quot;
+
+cell_anno.info&lt;-get_cells_annotation(human_HSPCs)
+head(cell_anno.info)</code></pre>
+<pre><code>##                              Cell   sampleID UMI_count detectedGenesPerCell
+## 34020   TAGTACCTCTCTCG-1_Sample21 1_Sample21     14189                 3432
+## 8826  AAGTTCGCAGGGATAC-1_Sample11 1_Sample11     30928                 5344
+## 16740   ATATGCCTCAGATC-1_Sample20 1_Sample20      8740                 2028
+## 7700   TCCTTTCCATCGAAGG-1_Sample6  1_Sample6     16194                 3717
+## 9091  ACGTAACTCCAAGCTA-1_Sample11 1_Sample11     15175                 3691
+## 33700   TACGATCTTTATCC-1_Sample21 1_Sample21     16009                 3909
+##       percent_mito data_set IsPassed  status
+## 34020     3.728240        5     TRUE      MF
+## 8826      5.842602        3     TRUE      MF
+## 16740     4.748284        4     TRUE      MF
+## 7700      6.595035        2     TRUE healthy
+## 9091      2.840198        3     TRUE      MF
+## 33700     3.604223        5     TRUE      MF</code></pre>
+<h4>
+Normalization
+</h4>
+<pre class="r"><code>normalize_UMIs(human_HSPCs,use.scaled.factor = T)</code></pre>
+<pre><code>## [1] &quot;Normalization is completed!.&quot;</code></pre>
+<h4>
+Variable gene detection
+</h4>
+<pre class="r"><code>get_variable_genes_by_fitting_GLM_model(human_HSPCs,mean_expr_cutoff = 0.1,disp_zscore_cutoff = 0.1)</code></pre>
+<pre><code>## [1] &quot;Calculate row variance..&quot;
+## 
+  |                                                                            
+  |                                                                      |   0%
+  |                                                                            
+  |========                                                              |  11%
+  |                                                                            
+  |================                                                      |  22%
+  |                                                                            
+  |=======================                                               |  33%
+  |                                                                            
+  |===============================                                       |  44%
+  |                                                                            
+  |=======================================                               |  56%
+  |                                                                            
+  |===============================================                       |  67%
+  |                                                                            
+  |======================================================                |  78%
+  |                                                                            
+  |==============================================================        |  89%
+  |                                                                            
+  |======================================================================| 100%[1] &quot;Using :12719 genes for fitting the GLM model!&quot;
+## [1] &quot;Identified :1326 variable genes&quot;</code></pre>
+<p>Alternatively, the function
+‘get_variable_genes_for_integrative_data_by_fitting_GLM_model’ can take
+highly variable genes identified from each individual sample into the
+analysis (see how to use the function below).</p>
+<p>(if a user wants to use this option, the comment (#) must be taken
+out in order to run the function)</p>
+<pre class="r"><code>#get_variable_genes_for_integrative_data_by_fitting_GLM_model(human_HSPCs,mean_expr_cutoff = 0.05,disp_zscore_cutoff = 0.05)</code></pre>
+<p>SingCellaR reads in the GMT file that contains the ribosomal and
+mitochondrial genes and removes these genes from the list of variable
+genes.</p>
+<pre class="r"><code>remove_unwanted_genes_from_variable_gene_set(human_HSPCs,gmt.file = &quot;../SingCellaR_example_datasets/Human_genesets/human.ribosomal-mitocondrial.genes.gmt&quot;,
+                                             removed_gene_sets=c(&quot;Ribosomal_gene&quot;,&quot;Mitocondrial_gene&quot;))</code></pre>
+<pre><code>## [1] &quot;4 genes are removed from the variable gene set.&quot;</code></pre>
+<p>Here, the plot shows highly variable genes in the fitted GLM
+model.</p>
+<pre class="r"><code>plot_variable_genes(human_HSPCs)</code></pre>
+<pre><code>## [1] &quot;Calculate row variance..&quot;
+## 
+  |                                                                            
+  |                                                                      |   0%
+  |                                                                            
+  |========                                                              |  11%
+  |                                                                            
+  |================                                                      |  22%
+  |                                                                            
+  |=======================                                               |  33%
+  |                                                                            
+  |===============================                                       |  44%
+  |                                                                            
+  |=======================================                               |  56%
+  |                                                                            
+  |===============================================                       |  67%
+  |                                                                            
+  |======================================================                |  78%
+  |                                                                            
+  |==============================================================        |  89%
+  |                                                                            
+  |======================================================================| 100%</code></pre>
+<p><img src="SingCellaR_workflow_Psaila_et_al_integration_files/figure-html/hvg_plot-1.png" width="672" /></p>
+</div>
+<div
+id="integrating-cells-without-applying-a-batch-correction-or-integrative-method"
+class="section level2">
+<h2>Integrating cells without applying a batch correction or integrative
+method</h2>
+<p>To investigate batch, donor, and sample effects. The analysis without
+applying integrative methods will be performed.</p>
+<h4>
+PCA analysis
+</h4>
+<p>Top 50 PCs will be calculated using IRLBA method from <a
+href="https://github.com/bwlewis/irlba"
+class="uri">https://github.com/bwlewis/irlba</a> The parameter
+“use.regressout.data” is critical. If TRUE, PCA uses the regress out
+data. If FALSE, PCA uses the normalized data without removing any
+unwanted source of variations.</p>
+<pre class="r"><code>runPCA(human_HSPCs,use.components=50,use.regressout.data = F)</code></pre>
+<pre><code>## [1] &quot;PCA analysis is done!.&quot;</code></pre>
+<p>Next, the number of PCs used for downstream analyses will be
+determined from the scree plot.</p>
+<pre class="r"><code>plot_PCA_Elbowplot(human_HSPCs)</code></pre>
+<p><img src="SingCellaR_workflow_Psaila_et_al_integration_files/figure-html/plot_PCA_elbow-1.png" width="672" /></p>
+<h4>
+UMAP analysis
+</h4>
+<pre class="r"><code>SingCellaR::runUMAP(human_HSPCs,dim_reduction_method = &quot;pca&quot;,n.dims.use = 20,n.neighbors = 30,
+        uwot.metric = &quot;euclidean&quot;)</code></pre>
+<pre><code>## 17:45:50 UMAP embedding parameters a = 1.121 b = 1.057</code></pre>
+<pre><code>## 17:45:50 Read 5000 rows and found 20 numeric columns</code></pre>
+<pre><code>## 17:45:50 Using Annoy for neighbor search, n_neighbors = 30</code></pre>
+<pre><code>## 17:45:51 Building Annoy index with metric = euclidean, n_trees = 50</code></pre>
+<pre><code>## 0%   10   20   30   40   50   60   70   80   90   100%</code></pre>
+<pre><code>## [----|----|----|----|----|----|----|----|----|----|</code></pre>
+<pre><code>## **************************************************|
+## 17:45:51 Writing NN index file to temp file /var/folders/c6/_w309xr54n7cphf9nw4x_ms40000gn/T//Rtmpovie3b/filed1126d923401
+## 17:45:51 Searching Annoy index using 8 threads, search_k = 3000
+## 17:45:51 Annoy recall = 100%
+## 17:45:52 Commencing smooth kNN distance calibration using 8 threads with target n_neighbors = 30
+## 17:45:52 Initializing from normalized Laplacian + noise (using irlba)
+## 17:45:52 Commencing optimization for 500 epochs, with 205146 positive edges
+## 17:45:59 Optimization finished</code></pre>
+<pre><code>## [1] &quot;UMAP analysis is done!.&quot;</code></pre>
+<h4>
+Plot UMAP with sampleIDs
+</h4>
+<pre class="r"><code>plot_umap_label_by_a_feature_of_interest(human_HSPCs,feature = &quot;sampleID&quot;,point.size = 0.5)</code></pre>
+<p><img src="SingCellaR_workflow_Psaila_et_al_integration_files/figure-html/plot_UMAP-1.png" width="672" />
+The UMAP plot shows the sample effect.</p>
+<h4>
+Plot UMAP with the sample status
+</h4>
+<pre class="r"><code>plot_umap_label_by_a_feature_of_interest(human_HSPCs,feature = &quot;status&quot;,point.size = 0.5)</code></pre>
+<p><img src="SingCellaR_workflow_Psaila_et_al_integration_files/figure-html/plot_UMAP_status-1.png" width="672" /></p>
+<p>UMAP plot shows the separation of samples by healthy and MF
+status.</p>
+<p>The followings show the workflow of using different integrative
+methods implemented in SingCellaR.</p>
+</div>
+<div id="supervised-harmony-integration" class="section level2">
+<h2>Supervised harmony integration</h2>
+<p>To run supervised harmony integration, the harmony software must be
+installed <a href="https://github.com/immunogenomics/harmony"
+class="uri">https://github.com/immunogenomics/harmony</a>. <span
+style="color:red"> Supervised harmony requires clustering information
+and differential genes across clusters from individual sample as the
+input. </span></p>
+<pre class="r"><code>library(harmony)
+runSupervised_Harmony(human_HSPCs,covariates = c(&quot;sampleID&quot;),n.dims.use = 20,
+                      hcl.height.cutoff = 0.25,harmony.max.iter = 20,n.seed = 1)</code></pre>
+<pre><code>## [1] &quot;Processing fGSEA for: cl1_1&quot;
+## [1] &quot;Processing fGSEA for: cl2_1&quot;
+## [1] &quot;Processing fGSEA for: cl3_1&quot;
+## [1] &quot;Processing fGSEA for: cl4_1&quot;
+## [1] &quot;Processing fGSEA for: cl5_1&quot;
+## [1] &quot;Processing fGSEA for: cl6_1&quot;
+## [1] &quot;Processing fGSEA for: cl7_1&quot;
+## [1] &quot;Processing fGSEA for: cl8_1&quot;
+## [1] &quot;Processing fGSEA for: cl9_1&quot;
+## [1] &quot;Processing fGSEA for: cl10_1&quot;
+## [1] &quot;Processing fGSEA for: cl11_1&quot;
+## [1] &quot;Processing fGSEA for: cl12_1&quot;
+## [1] &quot;Processing fGSEA for: cl1_2&quot;
+## [1] &quot;Processing fGSEA for: cl2_2&quot;
+## [1] &quot;Processing fGSEA for: cl3_2&quot;
+## [1] &quot;Processing fGSEA for: cl4_2&quot;
+## [1] &quot;Processing fGSEA for: cl5_2&quot;
+## [1] &quot;Processing fGSEA for: cl6_2&quot;
+## [1] &quot;Processing fGSEA for: cl7_2&quot;
+## [1] &quot;Processing fGSEA for: cl8_2&quot;
+## [1] &quot;Processing fGSEA for: cl9_2&quot;
+## [1] &quot;Processing fGSEA for: cl10_2&quot;
+## [1] &quot;Processing fGSEA for: cl11_2&quot;
+## [1] &quot;Processing fGSEA for: cl12_2&quot;
+## [1] &quot;Processing fGSEA for: cl13_2&quot;
+## [1] &quot;Processing fGSEA for: cl14_2&quot;
+## [1] &quot;Processing fGSEA for: cl15_2&quot;
+## [1] &quot;Processing fGSEA for: cl16_2&quot;
+## [1] &quot;Processing fGSEA for: cl1_3&quot;
+## [1] &quot;Processing fGSEA for: cl2_3&quot;
+## [1] &quot;Processing fGSEA for: cl3_3&quot;
+## [1] &quot;Processing fGSEA for: cl4_3&quot;
+## [1] &quot;Processing fGSEA for: cl5_3&quot;
+## [1] &quot;Processing fGSEA for: cl6_3&quot;
+## [1] &quot;Processing fGSEA for: cl7_3&quot;
+## [1] &quot;Processing fGSEA for: cl8_3&quot;
+## [1] &quot;Processing fGSEA for: cl9_3&quot;
+## [1] &quot;Processing fGSEA for: cl10_3&quot;
+## [1] &quot;Processing fGSEA for: cl11_3&quot;
+## [1] &quot;Processing fGSEA for: cl12_3&quot;
+## [1] &quot;Processing fGSEA for: cl13_3&quot;
+## [1] &quot;Processing fGSEA for: cl14_3&quot;
+## [1] &quot;Processing fGSEA for: cl16_3&quot;
+## [1] &quot;Processing fGSEA for: cl17_3&quot;
+## [1] &quot;Processing fGSEA for: cl1_4&quot;
+## [1] &quot;Processing fGSEA for: cl2_4&quot;
+## [1] &quot;Processing fGSEA for: cl3_4&quot;
+## [1] &quot;Processing fGSEA for: cl4_4&quot;
+## [1] &quot;Processing fGSEA for: cl5_4&quot;
+## [1] &quot;Processing fGSEA for: cl6_4&quot;
+## [1] &quot;Processing fGSEA for: cl7_4&quot;
+## [1] &quot;Processing fGSEA for: cl8_4&quot;
+## [1] &quot;Processing fGSEA for: cl9_4&quot;
+## [1] &quot;Processing fGSEA for: cl10_4&quot;
+## [1] &quot;Processing fGSEA for: cl11_4&quot;
+## [1] &quot;Processing fGSEA for: cl12_4&quot;
+## [1] &quot;Processing fGSEA for: cl13_4&quot;
+## [1] &quot;Processing fGSEA for: cl1_5&quot;
+## [1] &quot;Processing fGSEA for: cl2_5&quot;
+## [1] &quot;Processing fGSEA for: cl3_5&quot;
+## [1] &quot;Processing fGSEA for: cl4_5&quot;
+## [1] &quot;Processing fGSEA for: cl5_5&quot;
+## [1] &quot;Processing fGSEA for: cl6_5&quot;
+## [1] &quot;Processing fGSEA for: cl7_5&quot;
+## [1] &quot;Processing fGSEA for: cl8_5&quot;
+## [1] &quot;Processing fGSEA for: cl9_5&quot;
+## [1] &quot;Processing fGSEA for: cl10_5&quot;
+## [1] &quot;Processing fGSEA for: cl11_5&quot;
+## [1] &quot;Processing fGSEA for: cl12_5&quot;
+## [1] &quot;Processing fGSEA for: cl13_5&quot;
+## [1] &quot;Processing fGSEA for: cl14_5&quot;
+## [1] &quot;Processing fGSEA for: cl15_5&quot;
+## [1] &quot;Processing fGSEA for: cl16_5&quot;
+## [1] &quot;Identify : 23 matched and 3 unique (sample-specific) clusters!&quot;
+## [1] &quot;26 cluster centers will be used as the pre-assigned clusters for harmony!&quot;
+## [1] &quot;Supervised harmony analysis is done!.&quot;</code></pre>
+<h4>
+UMAP analysis
+</h4>
+<pre class="r"><code>SingCellaR::runUMAP(human_HSPCs,useIntegrativeEmbeddings = T, integrative_method = &quot;supervised_harmony&quot;,n.dims.use = 20,
+        n.neighbors = 30,uwot.metric = &quot;euclidean&quot;)</code></pre>
+<pre><code>## 17:46:44 UMAP embedding parameters a = 1.121 b = 1.057</code></pre>
+<pre><code>## 17:46:44 Read 5000 rows and found 20 numeric columns</code></pre>
+<pre><code>## 17:46:44 Using Annoy for neighbor search, n_neighbors = 30</code></pre>
+<pre><code>## 17:46:44 Building Annoy index with metric = euclidean, n_trees = 50</code></pre>
+<pre><code>## 0%   10   20   30   40   50   60   70   80   90   100%</code></pre>
+<pre><code>## [----|----|----|----|----|----|----|----|----|----|</code></pre>
+<pre><code>## **************************************************|
+## 17:46:44 Writing NN index file to temp file /var/folders/c6/_w309xr54n7cphf9nw4x_ms40000gn/T//Rtmpovie3b/filed11219fc5a31
+## 17:46:44 Searching Annoy index using 8 threads, search_k = 3000
+## 17:46:44 Annoy recall = 100%
+## 17:46:45 Commencing smooth kNN distance calibration using 8 threads with target n_neighbors = 30
+## 17:46:46 Initializing from normalized Laplacian + noise (using irlba)
+## 17:46:46 Commencing optimization for 500 epochs, with 218976 positive edges
+## 17:46:53 Optimization finished</code></pre>
+<pre><code>## [1] &quot;UMAP analysis is done!.&quot;</code></pre>
+<h4>
+Plot UMAP with sampleIDs
+</h4>
+<pre class="r"><code>plot_umap_label_by_a_feature_of_interest(human_HSPCs,feature = &quot;sampleID&quot;,point.size = 0.5)</code></pre>
+<img src="SingCellaR_workflow_Psaila_et_al_integration_files/figure-html/plot_UMAP_supervised_harmony-1.png" width="672" />
+<h4>
+Plot UMAP with sample status
+</h4>
+<pre class="r"><code>plot_umap_label_by_a_feature_of_interest(human_HSPCs,feature = &quot;status&quot;,point.size = 0.5)</code></pre>
+<p><img src="SingCellaR_workflow_Psaila_et_al_integration_files/figure-html/plot_UMAP_status_supervised_harmony-1.png" width="672" /></p>
+<h4>
+The superimposition of lineage signature genes
+</h4>
+<p>The plot below shows the superimposition of gene scores from
+erythroid, myeloid, lymphoid, and megakaryocytic gene sets on top UMAP
+and force-directed graph respectively.</p>
+<pre class="r"><code>plot_umap_label_by_multiple_gene_sets(human_HSPCs,gmt.file = &quot;../SingCellaR_example_datasets/Human_genesets/human.signature.genes.v1.gmt&quot;,
+                                      show_gene_sets = c(&quot;Erythroid&quot;,&quot;Lymphoid&quot;,&quot;Myeloid&quot;,&quot;Megakaryocyte&quot;),
+                                      custom_color = c(&quot;red&quot;,&quot;orange&quot;,&quot;cyan&quot;,&quot;purple&quot;),
+                                      isNormalizedByHouseKeeping = T,point.size = 1,background.color = &quot;black&quot;)</code></pre>
+<p><img src="SingCellaR_workflow_Psaila_et_al_integration_files/figure-html/UMAP_with_genesets-1.png" width="672" /></p>
+<h4>
+Force-directed graph analysis
+</h4>
+<p>SingCellaR incorporates Force-directed graph for the visualization of
+cell differentiation trajectories.</p>
+<pre class="r"><code>runFA2_ForceDirectedGraph(human_HSPCs,n.dims.use = 20, useIntegrativeEmbeddings = T,integrative_method = &quot;supervised_harmony&quot;,n.neighbors = 5,n.seed = 1,fa2_n_iter = 1000)</code></pre>
+<pre><code>## [1] &quot;Building Annoy index with metric =  euclidean , n_trees =  50&quot;</code></pre>
+<pre><code>## 0%   10   20   30   40   50   60   70   80   90   100%</code></pre>
+<pre><code>## [----|----|----|----|----|----|----|----|----|----|</code></pre>
+<pre><code>## **************************************************|</code></pre>
+<pre><code>## [1] &quot;Searching Annoy index, search_k =  500&quot;</code></pre>
+<pre><code>## 0%   10   20   30   40   50   60   70   80   90   100%
+## [----|----|----|----|----|----|----|----|----|----|
+## **************************************************|</code></pre>
+<pre><code>## [1] &quot;Processing fa2..&quot;
+## [1] &quot;Force directed graph analysis is done!.&quot;</code></pre>
+<pre class="r"><code>plot_forceDirectedGraph_label_by_multiple_gene_sets(human_HSPCs,gmt.file = &quot;../SingCellaR_example_datasets/Human_genesets/human.signature.genes.v1.gmt&quot;,
+                                      show_gene_sets = c(&quot;Erythroid&quot;,&quot;Lymphoid&quot;,&quot;Myeloid&quot;,&quot;Megakaryocyte&quot;),
+                                      custom_color = c(&quot;red&quot;,&quot;orange&quot;,&quot;cyan&quot;,&quot;purple&quot;),
+                                      isNormalizedByHouseKeeping = T,vertex.size = 1,edge.size = 0.05,
+                                      background.color = &quot;black&quot;)</code></pre>
+<p><img src="SingCellaR_workflow_Psaila_et_al_integration_files/figure-html/FA2_with_genesets-1.png" width="672" /></p>
+</div>
+<div id="harmony-integration" class="section level2">
+<h2>Harmony integration</h2>
+<p>To run harmony integration, the harmony software must be installed <a
+href="https://github.com/immunogenomics/harmony"
+class="uri">https://github.com/immunogenomics/harmony</a>.</p>
+<pre class="r"><code>runHarmony(human_HSPCs,covariates = c(&quot;sampleID&quot;),n.dims.use = 20,harmony.max.iter = 20,n.seed = 1)</code></pre>
+<pre><code>## [1] &quot;Harmony analysis is done!.&quot;</code></pre>
+<h4>
+UMAP analysis
+</h4>
+<pre class="r"><code>SingCellaR::runUMAP(human_HSPCs,useIntegrativeEmbeddings = T, integrative_method = &quot;harmony&quot;,n.dims.use = 20,
+        n.neighbors = 30,uwot.metric = &quot;euclidean&quot;)</code></pre>
+<pre><code>## 17:47:34 UMAP embedding parameters a = 1.121 b = 1.057</code></pre>
+<pre><code>## 17:47:34 Read 5000 rows and found 20 numeric columns</code></pre>
+<pre><code>## 17:47:34 Using Annoy for neighbor search, n_neighbors = 30</code></pre>
+<pre><code>## 17:47:34 Building Annoy index with metric = euclidean, n_trees = 50</code></pre>
+<pre><code>## 0%   10   20   30   40   50   60   70   80   90   100%</code></pre>
+<pre><code>## [----|----|----|----|----|----|----|----|----|----|</code></pre>
+<pre><code>## **************************************************|
+## 17:47:35 Writing NN index file to temp file /var/folders/c6/_w309xr54n7cphf9nw4x_ms40000gn/T//Rtmpovie3b/filed11245c48517
+## 17:47:35 Searching Annoy index using 8 threads, search_k = 3000
+## 17:47:35 Annoy recall = 100%
+## 17:47:35 Commencing smooth kNN distance calibration using 8 threads with target n_neighbors = 30
+## 17:47:36 Initializing from normalized Laplacian + noise (using irlba)
+## 17:47:36 Commencing optimization for 500 epochs, with 217414 positive edges
+## 17:47:43 Optimization finished</code></pre>
+<pre><code>## [1] &quot;UMAP analysis is done!.&quot;</code></pre>
+<h4>
+Plot UMAP with sampleIDs
+</h4>
+<pre class="r"><code>plot_umap_label_by_a_feature_of_interest(human_HSPCs,feature = &quot;sampleID&quot;,point.size = 0.5)</code></pre>
+<p><img src="SingCellaR_workflow_Psaila_et_al_integration_files/figure-html/plot_UMAP_harmony-1.png" width="672" /></p>
+<h4>
+Plot UMAP with the sample status
+</h4>
+<pre class="r"><code>plot_umap_label_by_a_feature_of_interest(human_HSPCs,feature = &quot;status&quot;,point.size = 0.5)</code></pre>
+<p><img src="SingCellaR_workflow_Psaila_et_al_integration_files/figure-html/plot_UMAP_status_harmony-1.png" width="672" /></p>
+<h4>
+The superimposition of lineage signature gene scores
+</h4>
+<p>The plot below shows the superimposition of lineage gene scores from
+erythroid, myeloid, lymphoid, and megakaryocytic gene sets on top UMAP
+and force-directed graph respectively.</p>
+<pre class="r"><code>plot_umap_label_by_multiple_gene_sets(human_HSPCs,gmt.file = &quot;../SingCellaR_example_datasets/Human_genesets/human.signature.genes.v1.gmt&quot;,
+                                      show_gene_sets = c(&quot;Erythroid&quot;,&quot;Lymphoid&quot;,&quot;Myeloid&quot;,&quot;Megakaryocyte&quot;),
+                                      custom_color = c(&quot;red&quot;,&quot;orange&quot;,&quot;cyan&quot;,&quot;purple&quot;),
+                                      isNormalizedByHouseKeeping = T,point.size = 1,background.color = &quot;black&quot;)</code></pre>
+<p><img src="SingCellaR_workflow_Psaila_et_al_integration_files/figure-html/UMAP_with_genesets_harmony-1.png" width="672" /></p>
+<h4>
+Force-directed graph analysis
+</h4>
+<p>SingCellaR incorporates force-directed graph for the visualization of
+cellular trajectories.</p>
+<pre class="r"><code>runFA2_ForceDirectedGraph(human_HSPCs,n.dims.use = 20, useIntegrativeEmbeddings = T,integrative_method = &quot;harmony&quot;,n.neighbors = 5,n.seed = 1,fa2_n_iter = 1000)</code></pre>
+<pre><code>## [1] &quot;Building Annoy index with metric =  euclidean , n_trees =  50&quot;</code></pre>
+<pre><code>## 0%   10   20   30   40   50   60   70   80   90   100%</code></pre>
+<pre><code>## [----|----|----|----|----|----|----|----|----|----|</code></pre>
+<pre><code>## **************************************************|</code></pre>
+<pre><code>## [1] &quot;Searching Annoy index, search_k =  500&quot;</code></pre>
+<pre><code>## 0%   10   20   30   40   50   60   70   80   90   100%
+## [----|----|----|----|----|----|----|----|----|----|
+## **************************************************|</code></pre>
+<pre><code>## [1] &quot;Processing fa2..&quot;
+## [1] &quot;Force directed graph analysis is done!.&quot;</code></pre>
+<pre class="r"><code>plot_forceDirectedGraph_label_by_multiple_gene_sets(human_HSPCs,gmt.file = &quot;../SingCellaR_example_datasets/Human_genesets/human.signature.genes.v1.gmt&quot;,
+                                      show_gene_sets = c(&quot;Erythroid&quot;,&quot;Lymphoid&quot;,&quot;Myeloid&quot;,&quot;Megakaryocyte&quot;),
+                                      custom_color = c(&quot;red&quot;,&quot;orange&quot;,&quot;cyan&quot;,&quot;purple&quot;),
+                                      isNormalizedByHouseKeeping = T,vertex.size = 1,edge.size = 0.1,
+                                      background.color = &quot;black&quot;)</code></pre>
+<p><img src="SingCellaR_workflow_Psaila_et_al_integration_files/figure-html/FA2_with_genesets_harmony-1.png" width="672" /></p>
+</div>
+<div id="seurat-integration" class="section level2">
+<h2>Seurat integration</h2>
+<p>To run Seurat integration, Seurat software must be installed <a
+href="https://satijalab.org/seurat/install.html"
+class="uri">https://satijalab.org/seurat/install.html</a>. The parameter
+‘use.SingCellaR.varGenes’ is critical. If TRUE, Seurat will use highly
+variable genes from all variable genes detected by SingCellaR analysis
+(from individual donor). If FALSE, Seurat will identify highly variable
+genes by default.</p>
+<pre class="r"><code>library(Seurat)
+
+meta.data&lt;-get_cells_annotation(human_HSPCs)
+rownames(meta.data)&lt;-meta.data$Cell
+
+runSeuratIntegration(human_HSPCs,Seurat.metadata=meta.data,n.dims.use = 20,
+                     Seurat.split.by = &quot;data_set&quot;,use.SingCellaR.varGenes = FALSE)</code></pre>
+<pre><code>## 
+  |                                                                            
+  |                                                                      |   0%[1] &quot;Process each Seurat object..&quot;
+## 
+  |                                                                            
+  |==============                                                        |  20%
+  |                                                                            
+  |============================                                          |  40%
+  |                                                                            
+  |==========================================                            |  60%
+  |                                                                            
+  |========================================================              |  80%
+  |                                                                            
+  |======================================================================| 100%[1] &quot;This process will take time and requires large RAM depending on the number of cells in your integration.&quot;
+## [1] &quot;Seurat integrative analysis is done!.&quot;</code></pre>
+<h4>
+UMAP analysis
+</h4>
+<pre class="r"><code>SingCellaR::runUMAP(human_HSPCs,useIntegrativeEmbeddings = T, integrative_method = &quot;seurat&quot;,n.dims.use = 20,
+        n.neighbors = 30,uwot.metric = &quot;euclidean&quot;)</code></pre>
+<pre><code>## 17:50:15 UMAP embedding parameters a = 1.121 b = 1.057</code></pre>
+<pre><code>## 17:50:15 Read 5000 rows and found 20 numeric columns</code></pre>
+<pre><code>## 17:50:15 Using Annoy for neighbor search, n_neighbors = 30</code></pre>
+<pre><code>## 17:50:15 Building Annoy index with metric = euclidean, n_trees = 50</code></pre>
+<pre><code>## 0%   10   20   30   40   50   60   70   80   90   100%</code></pre>
+<pre><code>## [----|----|----|----|----|----|----|----|----|----|</code></pre>
+<pre><code>## **************************************************|
+## 17:50:16 Writing NN index file to temp file /var/folders/c6/_w309xr54n7cphf9nw4x_ms40000gn/T//Rtmpovie3b/filed1121517a448
+## 17:50:16 Searching Annoy index using 8 threads, search_k = 3000
+## 17:50:16 Annoy recall = 100%
+## 17:50:17 Commencing smooth kNN distance calibration using 8 threads with target n_neighbors = 30
+## 17:50:17 Initializing from normalized Laplacian + noise (using irlba)
+## 17:50:17 Commencing optimization for 500 epochs, with 219184 positive edges
+## 17:50:24 Optimization finished</code></pre>
+<pre><code>## [1] &quot;UMAP analysis is done!.&quot;</code></pre>
+<h4>
+Plot UMAP with sampleIDs
+</h4>
+<pre class="r"><code>plot_umap_label_by_a_feature_of_interest(human_HSPCs,feature = &quot;sampleID&quot;,point.size = 0.5)</code></pre>
+<p><img src="SingCellaR_workflow_Psaila_et_al_integration_files/figure-html/plot_UMAP_seurat-1.png" width="672" /></p>
+<h4>
+Plot UMAP with the sample status
+</h4>
+<pre class="r"><code>plot_umap_label_by_a_feature_of_interest(human_HSPCs,feature = &quot;status&quot;,point.size = 0.5)</code></pre>
+<p><img src="SingCellaR_workflow_Psaila_et_al_integration_files/figure-html/plot_UMAP_status_seurat-1.png" width="672" /></p>
+<h4>
+The superimposition of lineage signature gene scores
+</h4>
+<p>The plot below shows the superimposition of gene scores from
+erythroid, myeloid, lymphoid, and megakaryocytic gene sets on top UMAP
+and force-directed graph respectively.</p>
+<pre class="r"><code>plot_umap_label_by_multiple_gene_sets(human_HSPCs,gmt.file = &quot;../SingCellaR_example_datasets/Human_genesets/human.signature.genes.v1.gmt&quot;,
+                                      show_gene_sets = c(&quot;Erythroid&quot;,&quot;Lymphoid&quot;,&quot;Myeloid&quot;,&quot;Megakaryocyte&quot;),
+                                      custom_color = c(&quot;red&quot;,&quot;orange&quot;,&quot;cyan&quot;,&quot;purple&quot;),
+                                      isNormalizedByHouseKeeping = T,point.size = 1,background.color = &quot;black&quot;)</code></pre>
+<p><img src="SingCellaR_workflow_Psaila_et_al_integration_files/figure-html/UMAP_with_genesets_seurat-1.png" width="672" /></p>
+<h4>
+Force-directed graph analysis
+</h4>
+<pre class="r"><code>runFA2_ForceDirectedGraph(human_HSPCs,n.dims.use = 20, useIntegrativeEmbeddings = T,integrative_method = &quot;seurat&quot;,n.neighbors = 5,n.seed = 1,fa2_n_iter = 1000)</code></pre>
+<pre><code>## [1] &quot;Building Annoy index with metric =  euclidean , n_trees =  50&quot;</code></pre>
+<pre><code>## 0%   10   20   30   40   50   60   70   80   90   100%</code></pre>
+<pre><code>## [----|----|----|----|----|----|----|----|----|----|</code></pre>
+<pre><code>## **************************************************|</code></pre>
+<pre><code>## [1] &quot;Searching Annoy index, search_k =  500&quot;</code></pre>
+<pre><code>## 0%   10   20   30   40   50   60   70   80   90   100%
+## [----|----|----|----|----|----|----|----|----|----|
+## **************************************************|</code></pre>
+<pre><code>## [1] &quot;Processing fa2..&quot;
+## [1] &quot;Force directed graph analysis is done!.&quot;</code></pre>
+<pre class="r"><code>plot_forceDirectedGraph_label_by_multiple_gene_sets(human_HSPCs,gmt.file = &quot;../SingCellaR_example_datasets/Human_genesets/human.signature.genes.v1.gmt&quot;,
+                                      show_gene_sets = c(&quot;Erythroid&quot;,&quot;Lymphoid&quot;,&quot;Myeloid&quot;,&quot;Megakaryocyte&quot;),
+                                      custom_color = c(&quot;red&quot;,&quot;orange&quot;,&quot;cyan&quot;,&quot;purple&quot;),
+                                      isNormalizedByHouseKeeping = T,vertex.size = 1,edge.size = 0.1,
+                                      background.color = &quot;black&quot;)</code></pre>
+<p><img src="SingCellaR_workflow_Psaila_et_al_integration_files/figure-html/FA2_with_genesets_seurat-1.png" width="672" /></p>
+</div>
+<div id="liger-integration" class="section level2">
+<h2>Liger integration</h2>
+<p>To run Liger’s online iNMF integration &lt;(<a
+href="http://htmlpreview.github.io/?https://github.com/welch-lab/liger/blob/master/vignettes/online_iNMF_tutorial.html"
+class="uri">http://htmlpreview.github.io/?https://github.com/welch-lab/liger/blob/master/vignettes/online_iNMF_tutorial.html</a>)&gt;,
+Liger software must be installed <a
+href="https://github.com/welch-lab/liger"
+class="uri">https://github.com/welch-lab/liger</a>.</p>
+<pre class="r"><code>library(rliger)
+runLiger_online_iNMF(human_HSPCs,liger.k = 20)</code></pre>
+<pre><code>## [1] &quot;This process will take time and requires large RAM depending on the number of cells in your integration.&quot;
+## Starting Online iNMF... 
+## 
+  |                                                                            
+  |==============                                                        |  20%
+  |                                                                            
+  |============================                                          |  40%
+  |                                                                            
+  |==========================================                            |  60%
+  |                                                                            
+  |========================================================              |  80%
+  |                                                                            
+  |======================================================================| 100%
+## Calculate metagene loadings... 
+## [1] &quot;Liger analysis is done!.&quot;</code></pre>
+<h4>
+UMAP analysis
+</h4>
+<pre class="r"><code>SingCellaR::runUMAP(human_HSPCs,useIntegrativeEmbeddings = T, integrative_method = &quot;liger&quot;,n.dims.use = 20,
+        n.neighbors = 30,uwot.metric = &quot;euclidean&quot;)</code></pre>
+<pre><code>## 17:51:16 UMAP embedding parameters a = 1.121 b = 1.057</code></pre>
+<pre><code>## 17:51:16 Read 5000 rows and found 20 numeric columns</code></pre>
+<pre><code>## 17:51:16 Using Annoy for neighbor search, n_neighbors = 30</code></pre>
+<pre><code>## 17:51:16 Building Annoy index with metric = euclidean, n_trees = 50</code></pre>
+<pre><code>## 0%   10   20   30   40   50   60   70   80   90   100%</code></pre>
+<pre><code>## [----|----|----|----|----|----|----|----|----|----|</code></pre>
+<pre><code>## **************************************************|
+## 17:51:17 Writing NN index file to temp file /var/folders/c6/_w309xr54n7cphf9nw4x_ms40000gn/T//Rtmpovie3b/filed112b052be4
+## 17:51:17 Searching Annoy index using 8 threads, search_k = 3000
+## 17:51:17 Annoy recall = 100%
+## 17:51:18 Commencing smooth kNN distance calibration using 8 threads with target n_neighbors = 30
+## 17:51:18 Initializing from normalized Laplacian + noise (using irlba)
+## 17:51:18 Commencing optimization for 500 epochs, with 211052 positive edges
+## 17:51:25 Optimization finished</code></pre>
+<pre><code>## [1] &quot;UMAP analysis is done!.&quot;</code></pre>
+<h4>
+Plot UMAP with sampleIDs
+</h4>
+<pre class="r"><code>plot_umap_label_by_a_feature_of_interest(human_HSPCs,feature = &quot;sampleID&quot;,point.size = 0.5)</code></pre>
+<p><img src="SingCellaR_workflow_Psaila_et_al_integration_files/figure-html/plot_UMAP_liger-1.png" width="672" /></p>
+<h4>
+Plot UMAP with the sample status
+</h4>
+<pre class="r"><code>plot_umap_label_by_a_feature_of_interest(human_HSPCs,feature = &quot;status&quot;,point.size = 0.5)</code></pre>
+<p><img src="SingCellaR_workflow_Psaila_et_al_integration_files/figure-html/plot_UMAP_status_liger-1.png" width="672" /></p>
+<h4>
+The superimposition of lineage signature gene scores
+</h4>
+<p>The plot below shows the superimposition of gene scores from
+erythroid, myeloid, lymphoid, and megakaryocytic gene sets on top UMAP
+and force-directed graph respectively.</p>
+<pre class="r"><code>plot_umap_label_by_multiple_gene_sets(human_HSPCs,gmt.file = &quot;../SingCellaR_example_datasets/Human_genesets/human.signature.genes.v1.gmt&quot;,
+                                      show_gene_sets = c(&quot;Erythroid&quot;,&quot;Lymphoid&quot;,&quot;Myeloid&quot;,&quot;Megakaryocyte&quot;),
+                                      custom_color = c(&quot;red&quot;,&quot;orange&quot;,&quot;cyan&quot;,&quot;purple&quot;),
+                                      isNormalizedByHouseKeeping = T,point.size = 1,background.color = &quot;black&quot;)</code></pre>
+<p><img src="SingCellaR_workflow_Psaila_et_al_integration_files/figure-html/UMAP_with_genesets_liger-1.png" width="672" /></p>
+</div>
+<div id="scanorama-integration" class="section level2">
+<h2>Scanorama integration</h2>
+<p>To run scanorama integration, Scanorama software must be installed <a
+href="https://github.com/brianhie/scanorama"
+class="uri">https://github.com/brianhie/scanorama</a>.</p>
+<pre class="r"><code>runScanorama(human_HSPCs)</code></pre>
+<pre><code>## [1] &quot;This process will take time and requires large RAM depending on the number of cells in your integration.&quot;
+## [1] &quot;Scanorama analysis is done!.&quot;</code></pre>
+<h4>
+PCA analysis
+</h4>
+<pre class="r"><code>runPCA(human_HSPCs,use.scanorama.integrative.matrix = T,use.components = 50)</code></pre>
+<pre><code>## [1] &quot;The scanorama matrix will be used for PCA!&quot;
+## [1] &quot;PCA analysis is done!.&quot;</code></pre>
+<h4>
+UMAP analysis
+</h4>
+<pre class="r"><code>SingCellaR::runUMAP(human_HSPCs,dim_reduction_method = &quot;pca&quot;,
+        n.dims.use = 20,n.neighbors = 30,uwot.metric = &quot;euclidean&quot;)</code></pre>
+<pre><code>## 17:51:39 UMAP embedding parameters a = 1.121 b = 1.057</code></pre>
+<pre><code>## 17:51:39 Read 5000 rows and found 20 numeric columns</code></pre>
+<pre><code>## 17:51:39 Using Annoy for neighbor search, n_neighbors = 30</code></pre>
+<pre><code>## 17:51:39 Building Annoy index with metric = euclidean, n_trees = 50</code></pre>
+<pre><code>## 0%   10   20   30   40   50   60   70   80   90   100%</code></pre>
+<pre><code>## [----|----|----|----|----|----|----|----|----|----|</code></pre>
+<pre><code>## **************************************************|
+## 17:51:40 Writing NN index file to temp file /var/folders/c6/_w309xr54n7cphf9nw4x_ms40000gn/T//Rtmpovie3b/filed1125eae38ee
+## 17:51:40 Searching Annoy index using 8 threads, search_k = 3000
+## 17:51:40 Annoy recall = 100%
+## 17:51:40 Commencing smooth kNN distance calibration using 8 threads with target n_neighbors = 30
+## 17:51:41 Initializing from normalized Laplacian + noise (using irlba)
+## 17:51:41 Commencing optimization for 500 epochs, with 224644 positive edges
+## 17:51:48 Optimization finished</code></pre>
+<pre><code>## [1] &quot;UMAP analysis is done!.&quot;</code></pre>
+<h4>
+Plot UMAP with sampleIDs
+</h4>
+<pre class="r"><code>plot_umap_label_by_a_feature_of_interest(human_HSPCs,feature = &quot;sampleID&quot;,point.size = 0.5)</code></pre>
+<p><img src="SingCellaR_workflow_Psaila_et_al_integration_files/figure-html/plot_UMAP_scanorama-1.png" width="672" /></p>
+<h4>
+Plot UMAP with the sample status
+</h4>
+<pre class="r"><code>plot_umap_label_by_a_feature_of_interest(human_HSPCs,feature = &quot;status&quot;,point.size = 0.5)</code></pre>
+<p><img src="SingCellaR_workflow_Psaila_et_al_integration_files/figure-html/plot_UMAP_status_scanorama-1.png" width="672" /></p>
+<h4>
+The superimposition of lineage signature gene scores
+</h4>
+<p>The plot below shows the superimposition of gene scores from
+erythroid, myeloid, lymphoid, and megakaryocytic gene sets on top UMAP
+and force-directed graph respectively.</p>
+<pre class="r"><code>plot_umap_label_by_multiple_gene_sets(human_HSPCs,gmt.file = &quot;../SingCellaR_example_datasets/Human_genesets/human.signature.genes.v1.gmt&quot;,
+                                      show_gene_sets = c(&quot;Erythroid&quot;,&quot;Lymphoid&quot;,&quot;Myeloid&quot;,&quot;Megakaryocyte&quot;),
+                                      custom_color = c(&quot;red&quot;,&quot;orange&quot;,&quot;cyan&quot;,&quot;purple&quot;),
+                                      isNormalizedByHouseKeeping = T,point.size = 1,background.color = &quot;black&quot;)</code></pre>
+<p><img src="SingCellaR_workflow_Psaila_et_al_integration_files/figure-html/UMAP_with_genesets_scanorama-1.png" width="672" /></p>
+</div>
+<div id="combat" class="section level2">
+<h2>Combat</h2>
+<p>To run Combat, the SVA software must be installed <a
+href="https://bioconductor.org/packages/release/bioc/html/sva.html"
+class="uri">https://bioconductor.org/packages/release/bioc/html/sva.html</a>.</p>
+<pre class="r"><code>library(sva)</code></pre>
+<pre><code>## Loading required package: mgcv</code></pre>
+<pre><code>## Loading required package: nlme</code></pre>
+<pre><code>## This is mgcv 1.8-40. For overview type &#39;help(&quot;mgcv-package&quot;)&#39;.</code></pre>
+<pre><code>## Loading required package: genefilter</code></pre>
+<pre><code>## 
+## Attaching package: &#39;genefilter&#39;</code></pre>
+<pre><code>## The following object is masked from &#39;package:patchwork&#39;:
+## 
+##     area</code></pre>
+<pre><code>## Loading required package: BiocParallel</code></pre>
+<pre class="r"><code>runCombat(human_HSPCs,use.reduced_dim = F,batch_identifier = &quot;sampleID&quot;)</code></pre>
+<pre><code>## Found 12 genes with uniform expression within a single batch (all zeros); these will not be adjusted for batch.</code></pre>
+<pre><code>## Found5batches</code></pre>
+<pre><code>## Adjusting for0covariate(s) or covariate level(s)</code></pre>
+<pre><code>## Standardizing Data across genes</code></pre>
+<pre><code>## Fitting L/S model and finding priors</code></pre>
+<pre><code>## Finding parametric adjustments</code></pre>
+<pre><code>## Adjusting the Data</code></pre>
+<pre><code>## [1] &quot;Combat analysis is done!&quot;
+## [1] &quot;The batch-free matrix is now in the regressout_matrix slot!&quot;
+## [1] &quot;Please continue PCA analysis with &#39;use.regressout.data=T&#39;.&quot;</code></pre>
+<h4>
+PCA analysis
+</h4>
+<pre class="r"><code>runPCA(human_HSPCs,use.regressout.data = T)</code></pre>
+<pre><code>## [1] &quot;PCA analysis is done!.&quot;</code></pre>
+<h4>
+UMAP analysis
+</h4>
+<pre class="r"><code>SingCellaR::runUMAP(human_HSPCs,dim_reduction_method = &quot;pca&quot;,n.dims.use = 20, n.neighbors = 20,uwot.metric = &quot;euclidean&quot;)</code></pre>
+<pre><code>## 17:51:57 UMAP embedding parameters a = 1.121 b = 1.057</code></pre>
+<pre><code>## 17:51:57 Read 5000 rows and found 20 numeric columns</code></pre>
+<pre><code>## 17:51:57 Using Annoy for neighbor search, n_neighbors = 20</code></pre>
+<pre><code>## 17:51:57 Building Annoy index with metric = euclidean, n_trees = 50</code></pre>
+<pre><code>## 0%   10   20   30   40   50   60   70   80   90   100%</code></pre>
+<pre><code>## [----|----|----|----|----|----|----|----|----|----|</code></pre>
+<pre><code>## **************************************************|
+## 17:51:57 Writing NN index file to temp file /var/folders/c6/_w309xr54n7cphf9nw4x_ms40000gn/T//Rtmpovie3b/filed1123bae53f2
+## 17:51:57 Searching Annoy index using 8 threads, search_k = 2000
+## 17:51:57 Annoy recall = 100%
+## 17:51:58 Commencing smooth kNN distance calibration using 8 threads with target n_neighbors = 20
+## 17:51:59 Initializing from normalized Laplacian + noise (using irlba)
+## 17:51:59 Commencing optimization for 500 epochs, with 141614 positive edges
+## 17:52:05 Optimization finished</code></pre>
+<pre><code>## [1] &quot;UMAP analysis is done!.&quot;</code></pre>
+<h4>
+Plot UMAP with sampleIDs
+</h4>
+<pre class="r"><code>plot_umap_label_by_a_feature_of_interest(human_HSPCs,feature = &quot;sampleID&quot;,point.size = 0.5)</code></pre>
+<img src="SingCellaR_workflow_Psaila_et_al_integration_files/figure-html/plot_UMAP_combat-1.png" width="672" />
+<h4>
+Plot UMAP with the sample status
+</h4>
+<pre class="r"><code>plot_umap_label_by_a_feature_of_interest(human_HSPCs,feature = &quot;status&quot;,point.size = 0.5)</code></pre>
+<p><img src="SingCellaR_workflow_Psaila_et_al_integration_files/figure-html/plot_UMAP_status_combat-1.png" width="672" /></p>
+<h4>
+The superimposition of lineage signature gene scores
+</h4>
+<p>The plot below shows the superimposition of gene scores from
+erythroid, myeloid, lymphoid, and megakaryocytic gene sets on top UMAP
+and force-directed graph respectively.</p>
+<pre class="r"><code>plot_umap_label_by_multiple_gene_sets(human_HSPCs,gmt.file = &quot;../SingCellaR_example_datasets/Human_genesets/human.signature.genes.v1.gmt&quot;,
+                                      show_gene_sets = c(&quot;Erythroid&quot;,&quot;Lymphoid&quot;,&quot;Myeloid&quot;,&quot;Megakaryocyte&quot;),
+                                      custom_color = c(&quot;red&quot;,&quot;orange&quot;,&quot;cyan&quot;,&quot;purple&quot;),
+                                      isNormalizedByHouseKeeping = T,point.size = 1,background.color = &quot;black&quot;)</code></pre>
+<p><img src="SingCellaR_workflow_Psaila_et_al_integration_files/figure-html/unnamed-chunk-2-1.png" width="672" /></p>
+</div>
+<div id="limma" class="section level2">
+<h2>Limma</h2>
+<p>To run Limma, the SVA software must be installed <a
+href="https://bioconductor.org/packages/release/bioc/html/sva.html"
+class="uri">https://bioconductor.org/packages/release/bioc/html/sva.html</a>.</p>
+<pre class="r"><code>remove_unwanted_confounders(human_HSPCs,residualModelFormulaStr=&quot;~UMI_count+percent_mito+sampleID&quot;)</code></pre>
+<pre><code>## 
+  |                                                                            
+  |                                                                      |   0%
+  |                                                                            
+  |====                                                                  |   6%
+  |                                                                            
+  |========                                                              |  12%
+  |                                                                            
+  |============                                                          |  18%
+  |                                                                            
+  |================                                                      |  24%
+  |                                                                            
+  |=====================                                                 |  29%
+  |                                                                            
+  |=========================                                             |  35%
+  |                                                                            
+  |=============================                                         |  41%
+  |                                                                            
+  |=================================                                     |  47%
+  |                                                                            
+  |=====================================                                 |  53%
+  |                                                                            
+  |=========================================                             |  59%
+  |                                                                            
+  |=============================================                         |  65%
+  |                                                                            
+  |=================================================                     |  71%
+  |                                                                            
+  |======================================================                |  76%
+  |                                                                            
+  |==========================================================            |  82%
+  |                                                                            
+  |==============================================================        |  88%
+  |                                                                            
+  |==================================================================    |  94%
+  |                                                                            
+  |======================================================================| 100%
+## [1] &quot;Removing unwanted sources of variation is done!&quot;</code></pre>
+<h4>
+PCA analysis
+</h4>
+<pre class="r"><code>runPCA(human_HSPCs,use.regressout.data = T)</code></pre>
+<pre><code>## [1] &quot;PCA analysis is done!.&quot;</code></pre>
+<h4>
+UMAP analysis
+</h4>
+<pre class="r"><code>SingCellaR::runUMAP(human_HSPCs,dim_reduction_method = &quot;pca&quot;,n.dims.use = 20, n.neighbors = 20,uwot.metric = &quot;euclidean&quot;)</code></pre>
+<pre><code>## 17:52:39 UMAP embedding parameters a = 1.121 b = 1.057</code></pre>
+<pre><code>## 17:52:39 Read 5000 rows and found 20 numeric columns</code></pre>
+<pre><code>## 17:52:39 Using Annoy for neighbor search, n_neighbors = 20</code></pre>
+<pre><code>## 17:52:39 Building Annoy index with metric = euclidean, n_trees = 50</code></pre>
+<pre><code>## 0%   10   20   30   40   50   60   70   80   90   100%</code></pre>
+<pre><code>## [----|----|----|----|----|----|----|----|----|----|</code></pre>
+<pre><code>## **************************************************|
+## 17:52:39 Writing NN index file to temp file /var/folders/c6/_w309xr54n7cphf9nw4x_ms40000gn/T//Rtmpovie3b/filed112602fd388
+## 17:52:39 Searching Annoy index using 8 threads, search_k = 2000
+## 17:52:40 Annoy recall = 100%
+## 17:52:40 Commencing smooth kNN distance calibration using 8 threads with target n_neighbors = 20
+## 17:52:41 Initializing from normalized Laplacian + noise (using irlba)
+## 17:52:41 Commencing optimization for 500 epochs, with 142244 positive edges
+## 17:52:47 Optimization finished</code></pre>
+<pre><code>## [1] &quot;UMAP analysis is done!.&quot;</code></pre>
+<h4>
+Plot UMAP with sampleIDs
+</h4>
+<pre class="r"><code>plot_umap_label_by_a_feature_of_interest(human_HSPCs,feature = &quot;sampleID&quot;,point.size = 0.5)</code></pre>
+<p><img src="SingCellaR_workflow_Psaila_et_al_integration_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
+<h4>
+Plot UMAP with the sample status
+</h4>
+<pre class="r"><code>plot_umap_label_by_a_feature_of_interest(human_HSPCs,feature = &quot;status&quot;,point.size = 0.5)</code></pre>
+<p><img src="SingCellaR_workflow_Psaila_et_al_integration_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
+<h4>
+The superimposition of lineage signature gene scores
+</h4>
+<p>The plot below shows the superimposition of gene scores from
+erythroid, myeloid, lymphoid, and megakaryocytic gene sets on top UMAP
+and force-directed graph respectively.</p>
+<pre class="r"><code>plot_umap_label_by_multiple_gene_sets(human_HSPCs,gmt.file = &quot;../SingCellaR_example_datasets/Human_genesets/human.signature.genes.v1.gmt&quot;,
+                                      show_gene_sets = c(&quot;Erythroid&quot;,&quot;Lymphoid&quot;,&quot;Myeloid&quot;,&quot;Megakaryocyte&quot;),
+                                      custom_color = c(&quot;red&quot;,&quot;orange&quot;,&quot;cyan&quot;,&quot;purple&quot;),
+                                      isNormalizedByHouseKeeping = T,point.size = 1,background.color = &quot;black&quot;)</code></pre>
+<p><img src="SingCellaR_workflow_Psaila_et_al_integration_files/figure-html/unnamed-chunk-6-1.png" width="672" /></p>
+</div>
+<div id="save-the-singcellar-integrative-object-for-further-analyses"
+class="section level2">
+<h2>Save the SingCellaR integrative object for further analyses</h2>
+<pre class="r"><code>save(human_HSPCs,file=&quot;../SingCellaR_example_datasets/Psaila_et_al/SingCellaR_objects/human_HSPCs_v0.1.SingCellaR.rdata&quot;)</code></pre>
+</div>
+
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
+<script>
+$(document).ready(function ()  {
+
+    // temporarily add toc-ignore selector to headers for the consistency with Pandoc
+    $('.unlisted.unnumbered').addClass('toc-ignore')
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
